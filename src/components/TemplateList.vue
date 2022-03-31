@@ -34,31 +34,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType } from 'vue'
 
 interface TemplateProps {
-  id: number;
-  title: string;
-  desc: string;
-  author: string;
-  coverImg: string;
-  copiedCount: number;
-  isHot?: boolean;
-  isNew?: boolean;
+  id: number
+  title: string
+  desc: string
+  author: string
+  coverImg: string
+  copiedCount: number
+  isHot?: boolean
+  isNew?: boolean
 }
 
 export default defineComponent({
-  name: "TemplateList",
+  name: 'TemplateList',
   props: {
     list: {
       type: Array as PropType<TemplateProps[]>,
-      required: true,
-    },
+      required: true
+    }
   },
   setup() {
-    return {};
-  },
-});
+    return {}
+  }
+})
 </script>
 
 <style>

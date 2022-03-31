@@ -29,28 +29,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent } from 'vue'
 
 const testTemplate = {
-  _id: "61a739f38d5263ce811e7064",
+  _id: '61a739f38d5263ce811e7064',
   id: 18,
-  title: "前端架构师直播海报",
-  desc: "未命名作品",
-  author: "136****5632",
-  coverImg: "https://static.imooc-lego.com/upload-files/screenshot-889755.png",
+  title: '前端架构师直播海报',
+  desc: '未命名作品',
+  author: '136****5632',
+  coverImg: 'https://static.imooc-lego.com/upload-files/screenshot-889755.png',
   copiedCount: 1244,
   isHot: true,
-  createdAt: "2020-11-18T05:47:04.000Z",
-};
+  createdAt: '2020-11-18T05:47:04.000Z'
+}
 
 export default defineComponent({
-  name: "TemplateDetail",
+  name: 'TemplateDetail',
   setup() {
     return {
-      template: testTemplate,
-    };
-  },
-});
+      template: testTemplate
+    }
+  }
+})
 </script>
 
 <style scoped>
