@@ -34,23 +34,14 @@
 </template>
 
 <script lang="ts">
+import { TemplateProps } from '@/store/templates'
 import { defineComponent, PropType } from 'vue'
-
-interface TemplateProps {
-  id: number
-  title: string
-  desc: string
-  author: string
-  coverImg: string
-  copiedCount: number
-  isHot?: boolean
-  isNew?: boolean
-}
 
 export default defineComponent({
   name: 'TemplateList',
   props: {
     list: {
+      // type 需要接受一个构造函数，因此不能将 Array as Templates[] （将Array断言为数组类型）
       type: Array as PropType<TemplateProps[]>,
       required: true
     }

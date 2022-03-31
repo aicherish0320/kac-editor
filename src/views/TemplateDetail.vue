@@ -29,25 +29,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
-const testTemplate = {
-  _id: '61a739f38d5263ce811e7064',
-  id: 18,
-  title: '前端架构师直播海报',
-  desc: '未命名作品',
-  author: '136****5632',
-  coverImg: 'https://static.imooc-lego.com/upload-files/screenshot-889755.png',
-  copiedCount: 1244,
-  isHot: true,
-  createdAt: '2020-11-18T05:47:04.000Z'
-}
+import { GlobalDataProps } from '@/store'
+import { TemplateProps } from '@/store/templates'
+import { computed, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'TemplateDetail',
   setup() {
+    const store = useStore<GlobalDataProps>()
+    const route = useRoute()
+
+    const currentId = route.params.id as string
+
+    const template = computed<TemplateProps>(() =>
+      store.getters.getTemplateById(parseInt(currentId))
+    )
+
     return {
-      template: testTemplate
+      template
     }
   }
 })
