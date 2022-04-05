@@ -20,7 +20,14 @@
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
-          <div class="preview-list" id="canvas-area"></div>
+          <div class="preview-list" id="canvas-area">
+            <component
+              v-for="component in components"
+              :key="component.id"
+              :is="component.name"
+              v-bind="component.props"
+            />
+          </div>
         </a-layout-content>
       </a-layout>
       <a-layout-sider
@@ -35,12 +42,22 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { GlobalDataProps } from '@/store'
+import { computed, defineComponent } from 'vue'
+import { useStore } from 'vuex'
+import KaText from '@/components/KaText.vue'
 
 export default defineComponent({
   name: 'Editor',
+  components: {
+    KaText
+  },
   setup() {
-    return {}
+    const store = useStore<GlobalDataProps>()
+    const components = computed(() => store.state.editor.components)
+    return {
+      components
+    }
   }
 })
 </script>
