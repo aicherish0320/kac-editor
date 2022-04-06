@@ -1,3 +1,4 @@
+import { TextComponentProps } from '@/defaultProps'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
 import { GlobalDataProps } from '.'
@@ -77,7 +78,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     components: testComponents
   },
   mutations: {
-    addComponent(state, props) {
+    addComponent(state, props: Partial<TextComponentProps>) {
       const newComponent: ComponentData = {
         id: uuidv4(),
         name: 'ka-text',
