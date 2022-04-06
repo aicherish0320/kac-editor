@@ -10,7 +10,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '',
         name: 'home',
         component: () => import('@/views/Home.vue'),
-        meta: { title: '欢迎来到慕课乐高' }
+        meta: { title: 'Welcome KacEditor' }
       },
       {
         path: 'template/:id',
@@ -23,8 +23,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/editor/:id',
     name: 'editor',
-    component: () =>
-      import(/* webpackChunkName: "editor" */ '../views/Editor.vue'),
+    component: () => import('../views/Editor.vue'),
     meta: { requiredLogin: true, title: '编辑我的设计' }
   }
 ]

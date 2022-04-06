@@ -1,11 +1,12 @@
 <template>
   <div class="editor-container">
+    <!-- 上部分 -->
     <a-layout>
       <a-layout-header class="header">
         <div class="page-title">
           <router-link to="/">
             <img
-              alt="慕课乐高"
+              alt="KacEditor"
               src="../assets/logo-simple.png"
               class="logo-img"
             />
@@ -13,7 +14,9 @@
         </div>
       </a-layout-header>
     </a-layout>
+    <!-- 下部分 -->
     <a-layout>
+      <!-- 左侧组件列表 -->
       <a-layout-sider width="300" style="background: #f00">
         <div class="sidebar-container">组件列表</div>
         <ComponentList
@@ -21,6 +24,7 @@
           @onItemClick="addItem"
         ></ComponentList>
       </a-layout-sider>
+      <!-- 画布编辑区域 -->
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
@@ -34,6 +38,7 @@
           </div>
         </a-layout-content>
       </a-layout>
+      <!-- 右侧组件属性 -->
       <a-layout-sider
         width="300"
         style="background: #0ff"

@@ -1,3 +1,4 @@
+// 默认展示组件选择列表
 export const defaultTextTemplates = [
   {
     text: '大标题',
