@@ -16,6 +16,10 @@
     <a-layout>
       <a-layout-sider width="300" style="background: #f00">
         <div class="sidebar-container">组件列表</div>
+        <ComponentList
+          :list="defaultTextTemplates"
+          @onItemClick="addItem"
+        ></ComponentList>
       </a-layout-sider>
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
@@ -46,17 +50,26 @@ import { GlobalDataProps } from '@/store'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
+import ComponentList from '@/components/ComponentList.vue'
+import { defaultTextTemplates } from '@/defaultTemplates'
 
 export default defineComponent({
   name: 'Editor',
   components: {
-    KaText
+    KaText,
+    ComponentList
   },
   setup() {
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
+
+    const addItem = (props: any) => {
+      store.commit('addComponent', props)
+    }
     return {
-      components
+      components,
+      defaultTextTemplates,
+      addItem
     }
   }
 })

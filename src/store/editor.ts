@@ -75,6 +75,16 @@ export const testComponents: ComponentData[] = [
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: testComponents
+  },
+  mutations: {
+    addComponent(state, props) {
+      const newComponent: ComponentData = {
+        id: uuidv4(),
+        name: 'ka-text',
+        props
+      }
+      state.components.push(newComponent)
+    }
   }
 }
 
