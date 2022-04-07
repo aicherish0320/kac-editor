@@ -48,6 +48,9 @@
         class="settings-panel"
       >
         组件属性
+        <template v-if="currentElement">
+          <PropsTable :props="currentElement.props"></PropsTable>
+        </template>
         <pre>{{ currentElement?.props }}</pre>
       </a-layout-sider>
     </a-layout>
@@ -63,13 +66,15 @@ import ComponentList from '@/components/ComponentList.vue'
 import { defaultTextTemplates } from '@/defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
 import { ComponentData } from '@/store/editor'
+import PropsTable from '@/components/PropsTable.vue'
 
 export default defineComponent({
   name: 'Editor',
   components: {
     KaText,
     ComponentList,
-    EditWrapper
+    EditWrapper,
+    PropsTable
   },
   setup() {
     const store = useStore<GlobalDataProps>()
