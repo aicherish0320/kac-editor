@@ -21,7 +21,8 @@
                 v-for="(o, k) in value.options"
                 :key="k"
                 :value="o.value"
-                >{{ o.text }}
+              >
+                <RenderVnode :vNode="o.text"></RenderVnode>
               </component>
             </template>
           </component>
@@ -34,6 +35,7 @@
 <script lang="ts">
 import { TextComponentProps } from '@/defaultProps'
 import IconSwitch from '@/components/IconSwitch.vue'
+import RenderVnode from './RenderVNode'
 import { mapPropsToForms } from '@/propsMap'
 import { reduce } from 'lodash'
 import { computed, defineComponent, PropType, VNode } from 'vue'
@@ -56,7 +58,8 @@ interface FormProps {
 export default defineComponent({
   name: 'PropsTable',
   components: {
-    IconSwitch
+    IconSwitch,
+    RenderVnode
   },
   props: {
     props: {

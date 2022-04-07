@@ -1,4 +1,4 @@
-import { VNode } from 'vue'
+import { h, VNode } from 'vue'
 import { TextComponentProps } from './defaultProps'
 
 export interface PropToForm {
@@ -16,6 +16,20 @@ export interface PropToForm {
 export type PropsToForms = {
   [p in keyof TextComponentProps]?: PropToForm
 }
+
+const fontFamilyArr = [
+  { text: '宋体', value: '"SimSun","STSong"' },
+  { text: '黑体', value: '"SimHei","STHeiti"' },
+  { text: '楷体', value: '"KaiTi","STKaiti"' },
+  { text: '仿宋', value: '"FangSong","STFangsong"' }
+]
+const fontFamilyOptions = fontFamilyArr.map((font) => {
+  return {
+    value: font.value,
+    // text: (<span style={{ fontFamily: font.value }}>{font.text}</span>) as VNode
+    text: h('span', { style: { fontFamily: font.value } }, font.text)
+  }
+})
 
 const defaultHandler = {
   component: 'a-input',
@@ -79,20 +93,7 @@ export const mapPropsToForms: PropsToForms = {
     component: 'a-select',
     subComponent: 'a-select-option',
     text: '字体',
-    options: [
-      {
-        value: '',
-        text: '无'
-      },
-      {
-        value: '黑体',
-        text: 'SimHei'
-      },
-      {
-        value: 'FangSong',
-        text: '仿宋'
-      }
-    ]
+    options: [{ value: '', text: '无' }, ...fontFamilyOptions]
   },
   fontWeight: {
     component: 'icon-switch',
