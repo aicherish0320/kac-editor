@@ -48,7 +48,9 @@ export const testComponents: ComponentData[] = [
       text: 'hello',
       fontSize: '20px',
       lineHeight: '2',
-      color: '#000000'
+      color: '#000000',
+      textAlign: 'right',
+      fontFamily: 'SimHei'
     }
   },
   {
@@ -58,7 +60,9 @@ export const testComponents: ComponentData[] = [
       text: 'hello2',
       fontSize: '30px',
       lineHeight: '1',
-      color: '#f00'
+      color: '#f00',
+      textAlign: 'center',
+      fontFamily: ''
     }
   }
   // {
