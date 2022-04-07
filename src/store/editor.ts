@@ -50,7 +50,8 @@ export const testComponents: ComponentData[] = [
       lineHeight: '2',
       color: '#000000',
       textAlign: 'right',
-      fontFamily: 'SimHei'
+      fontFamily: 'SimHei',
+      fontWeight: 'normal'
     }
   },
   {
@@ -62,7 +63,8 @@ export const testComponents: ComponentData[] = [
       lineHeight: '1',
       color: '#f00',
       textAlign: 'center',
-      fontFamily: ''
+      fontFamily: '',
+      fontWeight: 'bold'
     }
   }
   // {

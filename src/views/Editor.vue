@@ -49,7 +49,10 @@
       >
         组件属性
         <template v-if="currentElement">
-          <PropsTable :props="currentElement.props"></PropsTable>
+          <PropsTable
+            :props="currentElement.props"
+            @change="pageChange"
+          ></PropsTable>
         </template>
         <pre>{{ currentElement?.props }}</pre>
       </a-layout-sider>
@@ -90,12 +93,18 @@ export default defineComponent({
     const setActive = (id: string) => {
       store.commit('setActive', id)
     }
+
+    const pageChange = (e: any) => {
+      console.log(e)
+    }
+
     return {
       components,
       defaultTextTemplates,
       addItem,
       setActive,
-      currentElement
+      currentElement,
+      pageChange
     }
   }
 })
