@@ -36,6 +36,8 @@ export interface ComponentData {
 export interface EditorProps {
   // 供中间编辑器渲染的数组
   components: ComponentData[]
+  // 当前编辑的是哪个元素，uuid
+  currentElement: string
 }
 
 export const testComponents: ComponentData[] = [
@@ -56,18 +58,18 @@ export const testComponents: ComponentData[] = [
       fontSize: '30px',
       color: '#f00'
     }
-  },
-  {
-    id: uuidv4(),
-    name: 'ka-text',
-    props: {
-      text: 'hello3',
-      fontSize: '40px',
-      color: '#0f0',
-      actionType: 'url',
-      url: 'https://www.baidu.com'
-    }
   }
+  // {
+  //   id: uuidv4(),
+  //   name: 'ka-text',
+  //   props: {
+  //     text: 'hello3',
+  //     fontSize: '40px',
+  //     color: '#0f0',
+  //     actionType: 'url',
+  //     url: 'https://www.baidu.com'
+  //   }
+  // }
   // { id: uuidv4(), name: 'l-text', layerName:'图层2', props: { ...textDefaultProps, text: 'hello2', fontSize: '10px', fontWeight: 'bold', 'lineHeight': '2', textAlign: 'left', fontFamily: '' }},
   // { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { ...textDefaultProps, text: 'hello3', fontSize: '15px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
   // { id: uuidv4(), name: 'l-image', layerName:'图层4', props: { ...imageDefaultProps, src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg', width: '100px' }},
@@ -75,7 +77,15 @@ export const testComponents: ComponentData[] = [
 
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
-    components: testComponents
+    components: testComponents,
+    currentElement: ''
+  },
+  getters: {
+    getCurrentElement: (state) => {
+      return state.components.find(
+        (component) => component.id === state.currentElement
+      )
+    }
   },
   mutations: {
     addComponent(state, props: Partial<TextComponentProps>) {
@@ -85,6 +95,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         props
       }
       state.components.push(newComponent)
+    },
+    setActive(state, currentId: string) {
+      state.currentElement = currentId
     }
   }
 }

@@ -87,10 +87,11 @@ export const textStylePropNames = without(
   'text'
 )
 
-export const transformToComponentProps = (props: TextComponentProps) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const transformToComponentProps = <T extends {}>(props: T) => {
   return mapValues(props, (item) => {
     return {
-      type: item.constructor,
+      type: (item as any).constructor as StringConstructor,
       default: item
     }
   })

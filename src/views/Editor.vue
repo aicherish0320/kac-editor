@@ -17,7 +17,7 @@
     <!-- 下部分 -->
     <a-layout>
       <!-- 左侧组件列表 -->
-      <a-layout-sider width="300" style="background: #f00">
+      <a-layout-sider width="300" style="background: #fff">
         <div class="sidebar-container">组件列表</div>
         <ComponentList
           :list="defaultTextTemplates"
@@ -29,22 +29,26 @@
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <div class="preview-list" id="canvas-area">
-            <component
+            <EditWrapper
               v-for="component in components"
               :key="component.id"
-              :is="component.name"
-              v-bind="component.props"
-            />
+              :id="component.id"
+              :active="component.id === currentElement?.id"
+              @set-active="setActive"
+            >
+              <component :is="component.name" v-bind="component.props" />
+            </EditWrapper>
           </div>
         </a-layout-content>
       </a-layout>
       <!-- 右侧组件属性 -->
       <a-layout-sider
         width="300"
-        style="background: #0ff"
+        style="background: #fff"
         class="settings-panel"
       >
         组件属性
+        <pre>{{ currentElement?.props }}</pre>
       </a-layout-sider>
     </a-layout>
   </div>
@@ -57,24 +61,36 @@ import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import ComponentList from '@/components/ComponentList.vue'
 import { defaultTextTemplates } from '@/defaultTemplates'
+import EditWrapper from '@/components/EditWrapper.vue'
+import { ComponentData } from '@/store/editor'
 
 export default defineComponent({
   name: 'Editor',
   components: {
     KaText,
-    ComponentList
+    ComponentList,
+    EditWrapper
   },
   setup() {
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
+    const currentElement = computed<ComponentData | null>(
+      () => store.getters.getCurrentElement
+    )
 
     const addItem = (props: any) => {
       store.commit('addComponent', props)
     }
+
+    const setActive = (id: string) => {
+      store.commit('setActive', id)
+    }
     return {
       components,
       defaultTextTemplates,
-      addItem
+      addItem,
+      setActive,
+      currentElement
     }
   }
 })
