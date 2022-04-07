@@ -6,11 +6,15 @@
       class="prop-item"
       :id="`item-${key}`"
     >
-      <div>
-        <template v-if="value">
-          <component :is="value.component" :value="value.value"> </component>
-        </template>
-      </div>
+      <template v-if="value">
+        <span class="label" v-if="value.text">{{ value.text }}</span>
+        <component
+          :is="value.component"
+          :value="value.value"
+          v-bind="value.extraProps"
+        >
+        </component>
+      </template>
     </div>
   </div>
 </template>
