@@ -1,11 +1,7 @@
 <template>
   <div class="lego-color-picker">
     <div class="native-color-container">
-      <input
-        type="color"
-        :value="value"
-        @input="onChange($event.target.value)"
-      />
+      <input type="color" :value="value" @input="onChange($event)" />
     </div>
     <ul class="picked-color-list">
       <li
@@ -53,7 +49,11 @@ export default defineComponent({
   },
   emits: ['change'],
   setup(_, context) {
-    const onChange = (color: string) => {
+    const onChange = (color: string | Event) => {
+      if (typeof color !== 'string') {
+        const inputTarget = color.target as HTMLInputElement
+        color = inputTarget.value
+      }
       context.emit('change', color)
     }
     return {
