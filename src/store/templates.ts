@@ -18,7 +18,7 @@ export interface TemplatesProps {
   data: TemplateProps[]
 }
 
-const testData: TemplateProps[] = [
+export const testData: TemplateProps[] = [
   {
     _id: '61a739f38d5263ce811e7064',
     id: 18,
