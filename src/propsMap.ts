@@ -58,6 +58,7 @@ export const mapPropsToForms: PropsToForms = {
     text: '字号',
     ...pxToNumberHandler
   },
+
   lineHeight: {
     text: '行高',
     component: 'a-slider',
@@ -101,5 +102,27 @@ export const mapPropsToForms: PropsToForms = {
     afterTransform: (e: boolean) => (e ? 'bold' : 'normal'),
     valueProp: 'checked',
     extraProps: { iconName: 'BoldOutlined', tip: '加粗' }
+  },
+  fontStyle: {
+    component: 'icon-switch',
+    initialTransform: (v: string) => v === 'italic',
+    afterTransform: (e: boolean) => (e ? 'italic' : 'normal'),
+    valueProp: 'checked',
+    extraProps: { iconName: 'ItalicOutlined', tip: '斜体' }
+  },
+  textDecoration: {
+    component: 'icon-switch',
+    initialTransform: (v: string) => v === 'underline',
+    afterTransform: (e: boolean) => (e ? 'underline' : 'none'),
+    valueProp: 'checked',
+    extraProps: { iconName: 'UnderlineOutlined', tip: '下划线' }
+  },
+  color: {
+    component: 'color-picker',
+    text: '字体颜色'
+  },
+  backgroundColor: {
+    component: 'color-picker',
+    text: '背景颜色'
   }
 }
