@@ -52,7 +52,7 @@ export default defineComponent({
     }
   },
   emits: ['change'],
-  setup(props, context) {
+  setup(_, context) {
     const onChange = (color: string) => {
       context.emit('change', color)
     }
