@@ -35,6 +35,7 @@
 <script lang="ts">
 import { TextComponentProps } from '@/defaultProps'
 import IconSwitch from '@/components/IconSwitch.vue'
+import ColorPicker from './ColorPicker.vue'
 import RenderVnode from './RenderVNode'
 import { mapPropsToForms } from '@/propsMap'
 import { reduce } from 'lodash'
@@ -59,7 +60,8 @@ export default defineComponent({
   name: 'PropsTable',
   components: {
     IconSwitch,
-    RenderVnode
+    RenderVnode,
+    ColorPicker
   },
   props: {
     props: {
