@@ -1,9 +1,20 @@
 <template>
   <div class="file-upload">
-    <button @click="triggerUpload" :disabled="isUploading">
-      <span v-if="isUploading">正在上传</span>
-      <span v-else>点击上传</span>
-    </button>
+    <div class="upload-area" @click="triggerUpload">
+      <slot v-if="isUploading" name="loading">
+        <button disabled>正在上传</button>
+      </slot>
+      <slot
+        v-else-if="lastFileData && lastFileData.loaded"
+        name="uploaded"
+        :uploadedData="lastFileData.data"
+      >
+        <button disabled>点击上传</button></slot
+      >
+      <slot v-else name="default">
+        <button disabled>点击上传</button>
+      </slot>
+    </div>
     <input
       ref="fileInput"
       type="file"
@@ -17,8 +28,14 @@
         :key="file.uid"
         :class="`uploaded-file upload-${file.status}`"
       >
+        <span v-if="file.status === 'loading'" class="file-icon"
+          ><LoadingOutlined
+        /></span>
+        <span v-else class="file-icon"><FileOutlined /></span>
         <span class="filename">{{ file.name }}</span>
-        <button class="delete-icon" @click="removeFile(file.uid)">Del</button>
+        <span class="delete-icon" @click="removeFile(file.uid)"
+          ><DeleteOutlined
+        /></span>
       </li>
     </ul>
   </div>
@@ -26,8 +43,14 @@
 
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
+import {
+  DeleteOutlined,
+  LoadingOutlined,
+  FileOutlined
+} from '@ant-design/icons-vue'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 export interface UploadFile {
@@ -36,10 +59,16 @@ export interface UploadFile {
   name: string
   status: UploadStatus
   raw: File
+  resp?: any
 }
 
 export default defineComponent({
   name: 'Uploader',
+  components: {
+    DeleteOutlined,
+    LoadingOutlined,
+    FileOutlined
+  },
   props: {
     action: {
       type: String,
@@ -53,7 +82,16 @@ export default defineComponent({
     const isUploading = computed(() =>
       uploadedFiles.value.some((file) => file.status === 'loading')
     )
-
+    const lastFileData = computed(() => {
+      const lastFile = last(uploadedFiles.value)
+      if (lastFile) {
+        return {
+          loaded: lastFile.status === 'success',
+          data: lastFile.resp
+        }
+      }
+      return false
+    })
     const removeFile = (id: string) => {
       uploadedFiles.value = uploadedFiles.value.filter(
         (file) => file.uid !== id
@@ -86,12 +124,13 @@ export default defineComponent({
 
         fileObj.status = 'loading'
         try {
-          await axios.post(props.action, formData, {
+          const resp = await axios.post(props.action, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
           fileObj.status = 'success'
+          fileObj.resp = resp.data
         } catch (_) {
           fileObj.status = 'error'
         } finally {
@@ -108,7 +147,8 @@ export default defineComponent({
       handleFileChange,
       isUploading,
       uploadedFiles,
-      removeFile
+      removeFile,
+      lastFileData
     }
   }
 })
