@@ -1,7 +1,6 @@
-import { shallowMount, VueWrapper } from '@vue/test-utils'
+import { shallowMount, VueWrapper, flushPromises } from '@vue/test-utils'
 import Uploader from '@/components/Uploader.vue'
 import axios from 'axios'
-import flushPromises from 'flush-promises'
 
 jest.mock('axios')
 const mockedAxios = axios as jest.Mocked<typeof axios>
