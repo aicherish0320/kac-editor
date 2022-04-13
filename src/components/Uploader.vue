@@ -39,7 +39,7 @@ export default defineComponent({
       }
     }
 
-    const handleFileChange = (e: Event) => {
+    const handleFileChange = async (e: Event) => {
       const target = e.target as HTMLInputElement
       const files = target.files
       if (files) {
@@ -47,18 +47,22 @@ export default defineComponent({
         const formData = new FormData()
         formData.append('file', uploadedFile)
         fileStatus.value = 'loading'
-        axios
-          .post(props.action, formData, {
+        try {
+          await axios.post(props.action, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
-          .then(() => {
-            fileStatus.value = 'success'
-          })
-          .catch(() => {
-            fileStatus.value = 'error'
-          })
+          fileStatus.value = 'success'
+        } catch (_) {
+          fileStatus.value = 'error'
+        }
+        // .then(() => {
+        //   fileStatus.value = 'success'
+        // })
+        // .catch(() => {
+        //   fileStatus.value = 'error'
+        // })
       }
     }
 
