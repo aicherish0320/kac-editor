@@ -1,6 +1,10 @@
 <template>
   <div class="file-upload">
-    <div class="upload-area" @click="triggerUpload">
+    <div
+      class="upload-area"
+      :class="{ 'is-dragover': drag && isDragOver }"
+      v-on="events"
+    >
       <slot v-if="isUploading" name="loading">
         <button disabled>正在上传</button>
       </slot>
@@ -78,11 +82,16 @@ export default defineComponent({
     },
     beforeUpload: {
       type: Function as PropType<CheckUpload>
+    },
+    drag: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props) {
     const fileInput = ref<null | HTMLInputElement>(null)
     const uploadedFiles = ref<UploadFile[]>([])
+    const isDragOver = ref(false)
 
     const isUploading = computed(() =>
       uploadedFiles.value.some((file) => file.status === 'loading')
@@ -140,9 +149,16 @@ export default defineComponent({
       }
     }
 
+    let events: { [key: string]: (e: any) => void } = {
+      click: triggerUpload
+    }
+
     const handleFileChange = async (e: Event) => {
       const target = e.target as HTMLInputElement
-      const files = target.files
+      uploadFiles(target.files)
+    }
+
+    const uploadFiles = (files: null | FileList) => {
       if (files) {
         // 上传的原始文件
         const uploadedFile = files[0]
@@ -171,6 +187,31 @@ export default defineComponent({
         }
       }
     }
+    // 拖动
+    const handleDrag = (e: DragEvent, over: boolean) => {
+      e.preventDefault()
+      isDragOver.value = over
+    }
+    // 放下
+    const handleDrop = (e: DragEvent) => {
+      e.preventDefault()
+      isDragOver.value = false
+      if (e.dataTransfer) {
+        uploadFiles(e.dataTransfer.files)
+      }
+    }
+    if (props.drag) {
+      events = {
+        ...events,
+        dragover: (e: DragEvent) => {
+          handleDrag(e, true)
+        },
+        dragleave: (e: DragEvent) => {
+          handleDrag(e, false)
+        },
+        drop: handleDrop
+      }
+    }
 
     return {
       fileInput,
@@ -179,13 +220,25 @@ export default defineComponent({
       isUploading,
       uploadedFiles,
       removeFile,
-      lastFileData
+      lastFileData,
+      events,
+      isDragOver
     }
   }
 })
 </script>
 
 <style lang="scss">
+.upload-area {
+  width: 300px;
+  height: 200px;
+  &:hover {
+    border: 1px solid red;
+  }
+  &.is-dragover {
+    border: 1px solid green;
+  }
+}
 .upload-list {
   margin: 0;
   padding: 0;
