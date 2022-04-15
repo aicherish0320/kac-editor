@@ -5,18 +5,18 @@
       :class="{ 'is-dragover': drag && isDragOver }"
       v-on="events"
     >
-      <slot v-if="isUploading" name="loading">
+      <slot name="loading" v-if="isUploading">
         <button disabled>正在上传</button>
       </slot>
       <slot
-        v-else-if="lastFileData && lastFileData.loaded"
         name="uploaded"
+        v-else-if="lastFileData && lastFileData.loaded"
         :uploadedData="lastFileData.data"
       >
-        <button disabled>点击上传</button></slot
+        <button>点击上传</button></slot
       >
       <slot v-else name="default">
-        <button disabled>点击上传</button>
+        <button>点击上传</button>
       </slot>
     </div>
     <input
@@ -28,7 +28,7 @@
     />
     <ul>
       <li
-        v-for="file in uploadedFiles"
+        v-for="file in filesList"
         :key="file.uid"
         :class="`uploaded-file upload-${file.status}`"
       >
@@ -86,18 +86,25 @@ export default defineComponent({
     drag: {
       type: Boolean,
       default: false
+    },
+    autoUpload: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props) {
+    // 上传 input
     const fileInput = ref<null | HTMLInputElement>(null)
-    const uploadedFiles = ref<UploadFile[]>([])
+    // 文件列表 包含不同状态
+    const filesList = ref<UploadFile[]>([])
+    // 是否开启拖拽
     const isDragOver = ref(false)
-
+    // 文件列表中，只要有正在上传的就是正在上传
     const isUploading = computed(() =>
-      uploadedFiles.value.some((file) => file.status === 'loading')
+      filesList.value.some((file) => file.status === 'loading')
     )
     const lastFileData = computed(() => {
-      const lastFile = last(uploadedFiles.value)
+      const lastFile = last(filesList.value)
       if (lastFile) {
         return {
           loaded: lastFile.status === 'success',
@@ -106,42 +113,33 @@ export default defineComponent({
       }
       return false
     })
+    // 从文件列表移除文件
     const removeFile = (id: string) => {
-      uploadedFiles.value = uploadedFiles.value.filter(
-        (file) => file.uid !== id
-      )
+      filesList.value = filesList.value.filter((file) => file.uid !== id)
     }
-
+    // trigger upload
     const triggerUpload = () => {
       if (fileInput.value) {
         fileInput.value.click()
       }
     }
     // 上传文件
-    const postFile = async (uploadedFile: File) => {
+    const postFile = async (readyFile: UploadFile) => {
       const formData = new FormData()
-      formData.append('file', uploadedFile)
-      // 上传文件对象
-      const fileObj = reactive<UploadFile>({
-        uid: uuidv4(),
-        size: uploadedFile.size,
-        name: uploadedFile.name,
-        status: 'loading',
-        raw: uploadedFile
-      })
-      uploadedFiles.value.push(fileObj)
+      formData.append('file', readyFile.raw)
 
-      fileObj.status = 'loading'
+      readyFile.status = 'loading'
+
       try {
         const resp = await axios.post(props.action, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         })
-        fileObj.status = 'success'
-        fileObj.resp = resp.data
+        readyFile.status = 'success'
+        readyFile.resp = resp.data
       } catch (_) {
-        fileObj.status = 'error'
+        readyFile.status = 'error'
       } finally {
         if (fileInput.value) {
           fileInput.value.value = ''
@@ -152,13 +150,29 @@ export default defineComponent({
     let events: { [key: string]: (e: any) => void } = {
       click: triggerUpload
     }
-
+    // file input change
     const handleFileChange = async (e: Event) => {
       const target = e.target as HTMLInputElement
-      uploadFiles(target.files)
+      beforeUploadCheck(target.files)
     }
+    // add file to list
+    const addFileToList = (uploadedFile: File) => {
+      const fileObj = reactive<UploadFile>({
+        uid: uuidv4(),
+        size: uploadedFile.size,
+        name: uploadedFile.name,
+        status: 'ready',
+        raw: uploadedFile
+      })
 
-    const uploadFiles = (files: null | FileList) => {
+      filesList.value.push(fileObj)
+      // 自动上传
+      if (props.autoUpload) {
+        postFile(fileObj)
+      }
+    }
+    // before upload check
+    const beforeUploadCheck = (files: null | FileList) => {
       if (files) {
         // 上传的原始文件
         const uploadedFile = files[0]
@@ -167,9 +181,8 @@ export default defineComponent({
           if (result && result instanceof Promise) {
             result
               .then((processedFile) => {
-                // postFile(processedFile)
                 if (processedFile instanceof File) {
-                  postFile(processedFile)
+                  addFileToList(processedFile)
                 } else {
                   throw new Error(
                     'beforeUpload Promise should return File object'
@@ -180,13 +193,14 @@ export default defineComponent({
                 console.log(e)
               })
           } else if (result === true) {
-            postFile(uploadedFile)
+            addFileToList(uploadedFile)
           }
         } else {
-          postFile(uploadedFile)
+          addFileToList(uploadedFile)
         }
       }
     }
+
     // 拖动
     const handleDrag = (e: DragEvent, over: boolean) => {
       e.preventDefault()
@@ -197,9 +211,10 @@ export default defineComponent({
       e.preventDefault()
       isDragOver.value = false
       if (e.dataTransfer) {
-        uploadFiles(e.dataTransfer.files)
+        beforeUploadCheck(e.dataTransfer.files)
       }
     }
+    // 拖拽上传
     if (props.drag) {
       events = {
         ...events,
@@ -218,7 +233,7 @@ export default defineComponent({
       triggerUpload,
       handleFileChange,
       isUploading,
-      uploadedFiles,
+      filesList,
       removeFile,
       lastFileData,
       events,

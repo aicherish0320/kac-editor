@@ -1,5 +1,5 @@
 <template>
-  <uploader :drag="true" action="http://localhost:3300/api/upload"></uploader>
+  <uploader action="http://localhost:3300/api/upload"></uploader>
   <router-view />
 </template>
 
