@@ -5,7 +5,7 @@
       :class="{ 'is-dragover': drag && isDragOver }"
       v-on="events"
     >
-      <slot name="loading" v-if="isUploading">
+      <slot v-if="isUploading" name="loading">
         <button disabled>正在上传</button>
       </slot>
       <slot
@@ -13,8 +13,8 @@
         v-else-if="lastFileData && lastFileData.loaded"
         :uploadedData="lastFileData.data"
       >
-        <button>点击上传</button></slot
-      >
+        <button>点击上传</button>
+      </slot>
       <slot v-else name="default">
         <button>点击上传</button>
       </slot>
@@ -22,15 +22,14 @@
     <input
       ref="fileInput"
       type="file"
-      name="file"
       :style="{ display: 'none' }"
       @change="handleFileChange"
     />
-    <ul>
+    <ul :class="`upload-list upload-list-${listType}`" v-if="showUploadList">
       <li
+        :class="`uploaded-file upload-${file.status}`"
         v-for="file in filesList"
         :key="file.uid"
-        :class="`uploaded-file upload-${file.status}`"
       >
         <img
           v-if="file.url && listType === 'picture'"
@@ -38,7 +37,6 @@
           :src="file.url"
           :alt="file.name"
         />
-
         <span v-if="file.status === 'loading'" class="file-icon"
           ><LoadingOutlined
         /></span>
@@ -102,10 +100,15 @@ export default defineComponent({
     },
     listType: {
       type: String as PropType<FileListType>,
-      default: 'text'
+      defualt: 'text'
+    },
+    showUploadList: {
+      type: Boolean,
+      default: true
     }
   },
-  setup(props) {
+  emits: ['success', 'error', 'change'],
+  setup(props, { emit }) {
     // 上传 input
     const fileInput = ref<null | HTMLInputElement>(null)
     // 文件列表 包含不同状态
@@ -151,8 +154,15 @@ export default defineComponent({
         })
         readyFile.status = 'success'
         readyFile.resp = resp.data
-      } catch (_) {
+
+        emit('success', {
+          resp: resp.data,
+          file: readyFile,
+          list: filesList.value
+        })
+      } catch (e) {
         readyFile.status = 'error'
+        emit('error', { error: e, file: readyFile, list: filesList.value })
       } finally {
         if (fileInput.value) {
           fileInput.value.value = ''
@@ -272,16 +282,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.upload-area {
-  width: 300px;
-  height: 200px;
-  &:hover {
-    border: 1px solid red;
-  }
-  &.is-dragover {
-    border: 1px solid green;
-  }
-}
 .upload-list {
   margin: 0;
   padding: 0;

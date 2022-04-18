@@ -9,15 +9,18 @@
       <KaText v-bind="item"></KaText>
     </div>
   </div>
+  <StyledUploader @success="onImageUploaded"></StyledUploader>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import KaText from './KaText.vue'
+import StyledUploader from './StyledUploader.vue'
 export default defineComponent({
   name: 'ComponentList',
   components: {
-    KaText
+    KaText,
+    StyledUploader
   },
   props: {
     list: {
@@ -29,8 +32,12 @@ export default defineComponent({
     const onItemClick = (data: any) => {
       context.emit('on-item-click', data)
     }
+    const onImageUploaded = () => {
+      console.log(' onImageUploaded ')
+    }
     return {
-      onItemClick
+      onItemClick,
+      onImageUploaded
     }
   }
 })
