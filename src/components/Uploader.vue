@@ -32,6 +32,13 @@
         :key="file.uid"
         :class="`uploaded-file upload-${file.status}`"
       >
+        <img
+          v-if="file.url && listType === 'picture'"
+          class="upload-list-thumbnail"
+          :src="file.url"
+          :alt="file.name"
+        />
+
         <span v-if="file.status === 'loading'" class="file-icon"
           ><LoadingOutlined
         /></span>
@@ -58,6 +65,7 @@ import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
 type CheckUpload = (file: File) => boolean | Promise<File>
+type FileListType = 'picture' | 'text'
 
 export interface UploadFile {
   uid: string
@@ -66,6 +74,7 @@ export interface UploadFile {
   status: UploadStatus
   raw: File
   resp?: any
+  url?: string
 }
 
 export default defineComponent({
@@ -90,6 +99,10 @@ export default defineComponent({
     autoUpload: {
       type: Boolean,
       default: true
+    },
+    listType: {
+      type: String as PropType<FileListType>,
+      default: 'text'
     }
   },
   setup(props) {
@@ -164,6 +177,21 @@ export default defineComponent({
         status: 'ready',
         raw: uploadedFile
       })
+
+      if (props.listType === 'picture') {
+        // ! createObjectURL
+        // try {
+        //   fileObj.url = URL.createObjectURL(uploadedFile)
+        // } catch (error) {
+        //   console.log('upload File error', error)
+        // }
+        // ! FileReader
+        const fileReader = new FileReader()
+        fileReader.readAsDataURL(uploadedFile)
+        fileReader.addEventListener('load', () => {
+          fileObj.url = fileReader.result as string
+        })
+      }
 
       filesList.value.push(fileObj)
       // 自动上传
