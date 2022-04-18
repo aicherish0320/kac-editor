@@ -65,6 +65,8 @@ export interface TextComponentProps extends CommonComponentProps {
   backgroundColor: string
 }
 
+export declare type AllComponentProps = TextComponentProps & ImageComponentProps
+
 export const textDefaultProps: TextComponentProps = {
   // basic props - font styles
   text: '正文内容',
@@ -80,11 +82,24 @@ export const textDefaultProps: TextComponentProps = {
   ...commonDefaultProps
 }
 
+export interface ImageComponentProps extends CommonComponentProps {
+  src: string
+}
+
+export const imageDefaultProps: ImageComponentProps = {
+  src: 'test.url',
+  ...commonDefaultProps
+}
+
 export const textStylePropNames = without(
   Object.keys(textDefaultProps),
   'actionType',
   'url',
   'text'
+)
+export const imageStylePropsNames = without(
+  Object.keys(imageDefaultProps),
+  'src'
 )
 
 // eslint-disable-next-line @typescript-eslint/ban-types

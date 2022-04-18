@@ -13,9 +13,15 @@
 </template>
 
 <script lang="ts">
+import { imageDefaultProps, TextComponentProps } from '@/defaultProps'
+import { message } from 'ant-design-vue'
+import { v4 as uuidv4 } from 'uuid'
+import { ComponentData } from '@/store/editor'
 import { defineComponent } from 'vue'
 import KaText from './KaText.vue'
 import StyledUploader from './StyledUploader.vue'
+import { UploadResp } from '@/extraType'
+import { RespUploadData } from '@/store/respTypes'
 export default defineComponent({
   name: 'ComponentList',
   components: {
@@ -29,11 +35,31 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const onItemClick = (data: any) => {
-      context.emit('on-item-click', data)
+    // const onItemClick = (data: any) => {
+    //   context.emit('on-item-click', data)
+    // }
+    const onItemClick = (props: TextComponentProps) => {
+      const componentData: ComponentData = {
+        name: 'ka-text',
+        id: uuidv4(),
+        props
+      }
+      context.emit('on-item-click', componentData)
     }
-    const onImageUploaded = () => {
-      console.log(' onImageUploaded ')
+    const onImageUploaded = (data: { resp: RespUploadData; file: File }) => {
+      const { resp } = data
+
+      const componentData: ComponentData = {
+        name: 'ka-image',
+        id: uuidv4(),
+        props: {
+          ...imageDefaultProps
+        }
+      }
+      message.success('上传成功')
+
+      componentData.props.src = resp.data.urls[0]
+      context.emit('on-item-click', componentData)
     }
     return {
       onItemClick,

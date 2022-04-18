@@ -38,6 +38,7 @@ import { FileImageOutlined, LoadingOutlined } from '@ant-design/icons-vue'
 import { commonUploadCheck } from '../helper'
 import Uploader from './Uploader.vue'
 export default defineComponent({
+  name: 'StyledUploader',
   props: {
     text: {
       type: String,

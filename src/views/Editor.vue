@@ -65,6 +65,7 @@ import { GlobalDataProps } from '@/store'
 import { computed, defineComponent } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
+import KaImage from '@/components/KaImage.vue'
 import ComponentList from '@/components/ComponentList.vue'
 import { defaultTextTemplates } from '@/defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
@@ -75,6 +76,7 @@ export default defineComponent({
   name: 'Editor',
   components: {
     KaText,
+    KaImage,
     ComponentList,
     EditWrapper,
     PropsTable
@@ -86,8 +88,8 @@ export default defineComponent({
       () => store.getters.getCurrentElement
     )
 
-    const addItem = (props: any) => {
-      store.commit('addComponent', props)
+    const addItem = (component: any) => {
+      store.commit('addComponent', component)
     }
 
     const setActive = (id: string) => {

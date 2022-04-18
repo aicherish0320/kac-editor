@@ -8,6 +8,13 @@ export interface GlobalDataProps {
   templates: TemplatesProps
   editor: EditorProps
 }
+
+export interface ActionPayload {
+  urlParams?: { [key: string]: any }
+  data?: any
+  searchParams?: { [key: string]: any }
+}
+
 // 范型：让自定义的类型流动到函数内部
 export default createStore({
   modules: {

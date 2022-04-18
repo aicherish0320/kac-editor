@@ -1,22 +1,7 @@
-import { TextComponentProps } from '@/defaultProps'
+import { AllComponentProps } from '@/defaultProps'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
 import { GlobalDataProps } from '.'
-
-export interface AllComponentProps {
-  text: string
-  fontSize: string
-  fontFamily: string
-  fontWeight: string
-  fontStyle: string
-  textDecoration: string
-  lineHeight: string
-  textAlign: string
-  color: string
-  backgroundColor: string
-  actionType?: string
-  url?: string
-}
 
 export interface ComponentData {
   // 这个元素的 属性，属性请详见下面
@@ -31,6 +16,36 @@ export interface ComponentData {
   isLocked?: boolean
   // 图层名称
   layerName?: string
+}
+
+export interface PageProps {
+  backgroundColor: string
+  backgroundImage: string
+  backgroundRepeat: string
+  backgroundSize: string
+  height: string
+}
+
+export interface PageData {
+  id?: number
+  props?: PageProps
+  title?: string
+  desc?: string
+  coverImg?: string
+  uuid?: string
+  setting?: { [key: string]: any }
+  isTemplate?: boolean
+  isHot?: boolean
+  isNew?: boolean
+  author?: string
+  copiedCount?: number
+  status?: number
+  user?: {
+    gender: string
+    nickName: string
+    picture: string
+    userName: string
+  }
 }
 
 export interface EditorProps {
@@ -96,13 +111,13 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     }
   },
   mutations: {
-    addComponent(state, props: Partial<TextComponentProps>) {
-      const newComponent: ComponentData = {
-        id: uuidv4(),
-        name: 'ka-text',
-        props
-      }
-      state.components.push(newComponent)
+    addComponent(state, component: ComponentData) {
+      // const newComponent: ComponentData = {
+      //   id: uuidv4(),
+      //   name: 'ka-text',
+      //   props
+      // }
+      state.components.push(component)
     },
     setActive(state, currentId: string) {
       state.currentElement = currentId
