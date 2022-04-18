@@ -46,9 +46,9 @@ export default defineComponent({
   box-sizing: content-box !important;
 }
 .edit-wrapper > * {
-  position: static !important;
-  width: 100% !important;
-  height: 100% !important;
+  /* position: static !important; */
+  /* width: 100% !important; */
+  /* height: 100% !important; */
 }
 .edit-wrapper:hover {
   border: 1px dashed #ccc;

@@ -55,3 +55,7 @@
 - 总结
   - `URL.createObjectURL(file)`得到本地内存容器的 URL 地址，同步使用，比较方便快捷，多次使用需要注意手动释放内存的问题，性能优秀。
   - `FileReader.readAsDataURL(file)`胜在直接转换为 base64 格式，可以直接用于业务，无需二次转换格式
+
+### 图片获取真实大小的方法
+
+HTMLImageElement -> HTMLElement -> Element -> Node -> EventTarget

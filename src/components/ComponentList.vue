@@ -22,6 +22,7 @@ import KaText from './KaText.vue'
 import StyledUploader from './StyledUploader.vue'
 import { UploadResp } from '@/extraType'
 import { RespUploadData } from '@/store/respTypes'
+import { getImageDimensions } from '../helper'
 export default defineComponent({
   name: 'ComponentList',
   components: {
@@ -47,7 +48,8 @@ export default defineComponent({
       context.emit('on-item-click', componentData)
     }
     const onImageUploaded = (data: { resp: RespUploadData; file: File }) => {
-      const { resp } = data
+      const { resp, file } = data
+      console.log('file >>> ', file)
 
       const componentData: ComponentData = {
         name: 'ka-image',
@@ -59,7 +61,12 @@ export default defineComponent({
       message.success('上传成功')
 
       componentData.props.src = resp.data.urls[0]
-      context.emit('on-item-click', componentData)
+
+      getImageDimensions(file).then(({ width }) => {
+        const maxWidth = 373
+        componentData.props.width = (width > maxWidth ? maxWidth : width) + 'px'
+        context.emit('on-item-click', componentData)
+      })
     }
     return {
       onItemClick,
