@@ -59,3 +59,63 @@
 ### 图片获取真实大小的方法
 
 HTMLImageElement -> HTMLElement -> Element -> Node -> EventTarget
+
+## Javascript 模块发展历史
+
+模块就是一组可重用的代码
+
+### 模块化的优点
+
+- 可维护性
+- 可重用性
+
+#### ES6 之前没有模块的概念
+
+#### 全局变量 + 命名空间
+
+##### IIFE 自执行函数，创建一个封闭的作用域，赋值给一个全局变量
+
+```js
+var namesCollection = (function () {
+  return {}
+})()
+```
+
+**缺点**
+
+- 依赖全局变量，污染全局作用域，不安全
+- 依赖约定命名空间来避免冲突，可靠性不高
+- 需要手动管理依赖并控制执行顺序，容易出错
+- 需要在最终上线前手动合并所有用到的模块
+
+##### Common.js
+
+没法在浏览器里直接运行
+
+##### AMD
+
+- 采用异步方式加载模块
+- 仅仅需要在全局环境定义 require 与 define ，不需要其他的全局变量
+- 通过文件路径或模块自己声明的模块名定位模块
+- 通过打包工具自动分析依赖并合并
+- 配合特定的 AMD 加载器使用，RequireJS
+- 同时还诞生了很多类似的模块标准 CMD
+
+```js
+define(function (require) {
+  // 通过相对路径获取依赖模块
+  const bar = require('./bar')
+  // 模块产出
+  return function () {}
+})
+```
+
+##### ES6
+
+```js
+import bar from './bar'
+export default function () {}
+```
+
+- 引入和暴露的方式更加多样
+- 支持复杂的静态分析
