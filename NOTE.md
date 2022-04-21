@@ -119,3 +119,40 @@ export default function () {}
 
 - 引入和暴露的方式更加多样
 - 支持复杂的静态分析
+
+#### Bundler 是什么？
+
+诞生原因：使用 import export 这种同步加载的方式在大多数浏览器中无法使用。
+
+#### Bundler 打包工具
+
+将浏览器不支持的模块进行编译，转换，合并最后生成的代码可以在浏览器端良好的运行的工具
+
+#### Webpack Rollup
+
+对于 web 应用来说：一般采用单 Javascript 文件入口
+
+- webpack：大型 SPA 项目的模块化构建，也就是我们常说的 web 应用
+  - 通过各种 Loader 处理各种各样的静态资源
+  - 通过各种插件 Plugins 对整体文件进行一些处理
+  - Code splitting 将公共模块进行提取
+  - 提供一个 webpack-dev-server，进行本地开发
+  - 支持 HMR 模块热替换
+- Rollup：rollup 设计之初就是面向 ES module 的，构建出结构扁平、性能出众的类库
+  - ES module 的规则
+    - import 只能作为模块顶层的语句出现，不能出现在 function 里面或是 if 里面
+    - ES import 的模块名只能是字符串常量
+    - 不管 import 的语句出现的位置在哪里，在模块初始化的时候所有的 import 都必须已经导入完成
+  - 支持 tree-shaking，目的是将 es modules 打包生成特定的 JS 模块，并减少它的体积
+
+##### webpack 的优势
+
+- 强大的生态插件
+- 面向开发应用的特性支持 HRM，按需加载，公共模块提取
+- 简化 web 开发环节，图片自动转 base64，资源的缓存（添加 chunk）
+
+##### Rollup 的优势
+
+- 构建高性能的模块文件，这正是类库所需要的
+- 编译出来的代码可读性好，内容更小，执行效率更高
+- 配置比较简单
