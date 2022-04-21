@@ -156,3 +156,32 @@ export default function () {}
 - 构建高性能的模块文件，这正是类库所需要的
 - 编译出来的代码可读性好，内容更小，执行效率更高
 - 配置比较简单
+
+### 打包什么类型的文件
+
+- CommonJS、ES6 modules - 需要特殊的 module bundler 支持
+- AMD 已经有点过时了 - 需要使用特殊的 Loader - require.js
+- 浏览器中直接使用 - UMD
+
+  - 通用的一种 Javascript 格式
+  - 兼容 Common.js AMD、浏览器
+  - Vue 和 React 都提供了这样的格式
+  - 不是一种推荐的格式，太大了，不支持 tree shaking
+
+- 首要格式 - ES modules，并且提供支持 Typescript 的 type 文件
+- 备选方案 - UMD
+
+### snowpack
+
+- bundler 的问题
+  - 当资源越来越多的时候，打包速度越来越慢
+  - 大中型项目，启动时间可能达到好几分钟
+- snowpack
+  - 利用新版浏览器支持 es modules 的特性
+  - 不会被打包
+  - 每个文件编译一次，永久被缓存
+  - 当一个文件修改的时候，只需要重新 build 那一个文件
+  - 处理 node_modules 模块
+    - 它扫描 node_modules 中的模块。找到使用的模块
+    - 将每个模块都分别转换成单个 js 文件
+    - 这些单个文件都是 esm 模块，可以被最新的浏览器直接使用
