@@ -14,7 +14,7 @@
     </a-modal>
     <div
       class="image-preview"
-      :style="{ backgroundImage: backgrondUrl }"
+      :style="{ backgroundImage: backgroundUrl }"
       :class="{ extraHeight: showDelete }"
     ></div>
     <div class="image-process">
@@ -37,6 +37,7 @@ import { DeleteOutlined, ScissorOutlined } from '@ant-design/icons-vue'
 import StyledUploader from './StyledUploader.vue'
 import { UploadResp } from '../extraType'
 import { RespUploadData } from '../store/respTypes'
+import axios from 'axios'
 interface CropDataProps {
   x: number
   y: number
@@ -67,19 +68,21 @@ export default defineComponent({
   emits: ['change', 'uploaded'],
   setup(props, context) {
     const showModal = ref(false)
-    const backgrondUrl = computed(() => `url(${props.value})`)
+    const backgroundUrl = computed(() => `url(${props.value})`)
     const baseImageUrl = computed(() => props.value.split('?')[0])
     const cropperImg = ref<null | HTMLImageElement>(null)
     let cropper: Cropper
     let cropData: CropDataProps | null = null
+    // 监听 modal 显示
     watch(showModal, async (newValue) => {
       if (newValue) {
         await nextTick()
-        console.log(cropperImg.value)
         if (cropperImg.value) {
           cropper = new Cropper(cropperImg.value, {
             crop(event) {
               const { x, y, width, height } = event.detail
+              console.log(event)
+
               cropData = {
                 x: Math.floor(x),
                 y: Math.floor(y),
@@ -101,20 +104,23 @@ export default defineComponent({
         const cropperURL =
           baseImageUrl.value +
           `?x-oss-process=image/crop,x_${x},y_${y},w_${width},h_${height}`
-        // 不使用 阿里云 OSS，拿到截图图片再次上传的处理方法
-        // 这里实现还是采用原方法，假如同学们愿意使用重新上传的方法的话，请看下面注释的代码
+        // ! 不使用 阿里云 OSS，拿到截图图片再次上传的处理方法
+        // ! 这里实现还是采用原方法，假如同学们愿意使用重新上传的方法的话，请看下面注释的代码
         // cropper.getCroppedCanvas().toBlob((blob) => {
         //   if (blob) {
         //     const formData = new FormData()
         //     formData.append('croppedImage', blob, 'test.png')
-        //     axios.post('http://local.test:7001/api/upload/', formData, {
-        //       headers: {
-        //         'Content-Type': 'multipart/form-data'
-        //       }
-        //     }).then(resp => {
-        //       context.emit('change', resp.data.data.url)
-        //       showModal.value = false
-        //     })
+        //     axios
+        //       .post('http://localhost:3000/api/utils/upload-img', formData, {
+        //         headers: {
+        //           'Content-Type': 'multipart/form-data'
+        //         }
+        //       })
+        //       .then((resp) => {
+        //         // context.emit('change', resp.data.data.url)
+        //         context.emit('change', resp.data.data.urls[0])
+        //         showModal.value = false
+        //       })
         //   }
         // })
         context.emit('change', cropperURL)
@@ -133,7 +139,7 @@ export default defineComponent({
     return {
       handleFileUploaded,
       handleDelete,
-      backgrondUrl,
+      backgroundUrl,
       showModal,
       cropperImg,
       handleOk,

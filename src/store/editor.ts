@@ -95,7 +95,7 @@ export const testComponents: ComponentData[] = [
     layerName: '图层4',
     props: {
       // ...imageDefaultProps,
-      src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg',
+      src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg',
       width: '100px'
     }
   }

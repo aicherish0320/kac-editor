@@ -9,6 +9,8 @@ import 'kac-components/dist/bundle.css'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
+import 'cropperjs/dist/cropper.css'
+
 const app = createApp(App)
 
 app.use(Antd).use(KacComponents).use(store).use(router)
