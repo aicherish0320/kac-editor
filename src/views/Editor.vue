@@ -97,7 +97,7 @@ export default defineComponent({
     }
 
     const pageChange = (e: any) => {
-      console.log(e)
+      store.commit('updateComponent', e)
     }
 
     return {

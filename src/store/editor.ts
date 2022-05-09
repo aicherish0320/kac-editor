@@ -1,4 +1,4 @@
-import { AllComponentProps } from '@/defaultProps'
+import { AllComponentProps, TextComponentProps } from '@/defaultProps'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
 import { GlobalDataProps } from '.'
@@ -84,6 +84,17 @@ export const testComponents: ComponentData[] = [
   }
   // {
   //   id: uuidv4(),
+  //   name: 'ka-image',
+  //   layerName: '图层4',
+  //   props: {
+  //     ...imageDefaultProps,
+  //     src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg',
+  //     width: '100px'
+  //   }
+  // }
+
+  // {
+  //   id: uuidv4(),
   //   name: 'ka-text',
   //   props: {
   //     text: 'hello3',
@@ -95,7 +106,6 @@ export const testComponents: ComponentData[] = [
   // }
   // { id: uuidv4(), name: 'l-text', layerName:'图层2', props: { ...textDefaultProps, text: 'hello2', fontSize: '10px', fontWeight: 'bold', 'lineHeight': '2', textAlign: 'left', fontFamily: '' }},
   // { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { ...textDefaultProps, text: 'hello3', fontSize: '15px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
-  // { id: uuidv4(), name: 'l-image', layerName:'图层4', props: { ...imageDefaultProps, src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg', width: '100px' }},
 ]
 
 const editor: Module<EditorProps, GlobalDataProps> = {
@@ -121,6 +131,14 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     },
     setActive(state, currentId: string) {
       state.currentElement = currentId
+    },
+    updateComponent(state, { key, value }) {
+      const updatedComponent = state.components.find(
+        (component) => component.id === state.currentElement
+      )
+      if (updatedComponent) {
+        updatedComponent.props[key as keyof TextComponentProps] = value
+      }
     }
   }
 }
