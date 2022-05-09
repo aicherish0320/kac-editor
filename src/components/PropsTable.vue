@@ -40,6 +40,8 @@ import RenderVnode from './RenderVNode'
 import { mapPropsToForms } from '@/propsMap'
 import { reduce } from 'lodash'
 import { computed, defineComponent, PropType, VNode } from 'vue'
+import { AllComponentProps } from 'kac-components'
+import ImageProcessor from '@/components/ImageProcessor.vue'
 
 // 在此处定义一个与 PropToForm 类似的数据结构
 // 因为有部分属性是在属性表单定义的时候需要的 (initialTransform)
@@ -61,11 +63,12 @@ export default defineComponent({
   components: {
     IconSwitch,
     RenderVnode,
-    ColorPicker
+    ColorPicker,
+    ImageProcessor
   },
   props: {
     props: {
-      type: Object as PropType<TextComponentProps>,
+      type: Object as PropType<AllComponentProps>,
       required: true
     }
   },
@@ -75,7 +78,7 @@ export default defineComponent({
       return reduce(
         props.props,
         (result, value, key) => {
-          const newKey = key as keyof TextComponentProps
+          const newKey = key as keyof AllComponentProps
           const item = mapPropsToForms[newKey]
 
           if (item) {
@@ -137,8 +140,8 @@ export default defineComponent({
   width: 150px;
 }
 .prop-component.component-shadow-picker,
-.prop-component.component-image-processer,
-.prop-component.component-background-processer {
+.prop-component.component-image-processor,
+.prop-component.component-background-processor {
   width: 100%;
 }
 </style>

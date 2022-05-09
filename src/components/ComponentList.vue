@@ -13,12 +13,13 @@
 </template>
 
 <script lang="ts">
-import { imageDefaultProps, TextComponentProps } from '@/defaultProps'
+// import { imageDefaultProps, TextComponentProps } from '@/defaultProps'
+import { imageDefaultProps, TextComponentProps } from 'kac-components'
 import { message } from 'ant-design-vue'
 import { v4 as uuidv4 } from 'uuid'
 import { ComponentData } from '@/store/editor'
 import { defineComponent } from 'vue'
-import KaText from './KaText.vue'
+// import KaText from './KaText.vue'
 import StyledUploader from './StyledUploader.vue'
 import { UploadResp } from '@/extraType'
 import { RespUploadData } from '@/store/respTypes'
@@ -26,7 +27,7 @@ import { getImageDimensions } from '../helper'
 export default defineComponent({
   name: 'ComponentList',
   components: {
-    KaText,
+    // KaText,
     StyledUploader
   },
   props: {

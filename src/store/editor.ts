@@ -53,6 +53,8 @@ export interface PageData {
   }
 }
 
+export type AllFormProps = PageProps & AllComponentProps
+
 export interface EditorProps {
   // 供中间编辑器渲染的数组
   components: ComponentData[]
@@ -92,7 +94,7 @@ export const testComponents: ComponentData[] = [
     name: 'ka-image',
     layerName: '图层4',
     props: {
-      ...imageDefaultProps,
+      // ...imageDefaultProps,
       src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg',
       width: '100px'
     }
