@@ -1,4 +1,9 @@
-import { AllComponentProps, TextComponentProps } from '@/defaultProps'
+// import { AllComponentProps, TextComponentProps } from '@/defaultProps'
+import {
+  AllComponentProps,
+  TextComponentProps,
+  imageDefaultProps
+} from 'kac-components'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
 import { GlobalDataProps } from '.'
@@ -81,17 +86,17 @@ export const testComponents: ComponentData[] = [
       fontFamily: '',
       fontWeight: 'bold'
     }
+  },
+  {
+    id: uuidv4(),
+    name: 'ka-image',
+    layerName: '图层4',
+    props: {
+      ...imageDefaultProps,
+      src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg',
+      width: '100px'
+    }
   }
-  // {
-  //   id: uuidv4(),
-  //   name: 'ka-image',
-  //   layerName: '图层4',
-  //   props: {
-  //     ...imageDefaultProps,
-  //     src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg',
-  //     width: '100px'
-  //   }
-  // }
 
   // {
   //   id: uuidv4(),
