@@ -42,5 +42,17 @@ describe('InputEdit component', () => {
     expect(wrapper.find('span').exists()).toBeTruthy()
     expect(wrapper.get('span').text()).toBe('testNew')
   })
-  // it('click outside should render to default layout with new value', () => {})
+  it('click outside should render to default layout with new value', async () => {
+    await wrapper.trigger('click')
+    await wrapper.get('input').setValue('testUpdated')
+    const event = new MouseEvent('click')
+    document.dispatchEvent(event)
+    await nextTick()
+    expect(wrapper.find('span').exists()).toBeTruthy()
+    expect(wrapper.get('span').text()).toBe('testUpdated')
+    const events = wrapper.emitted('change')
+    if (events) {
+      expect(events[1]).toEqual(['testUpdated'])
+    }
+  })
 })

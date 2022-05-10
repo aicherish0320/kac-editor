@@ -50,13 +50,15 @@ describe('test vuex store', () => {
         cloneComponents.length + 1
       )
       const lastItem = last(store.state.editor.components)
-      expect(lastItem?.props.text).toBe('text1')
+      if (lastItem && lastItem.props) {
+        expect(lastItem.props.text).toBe('text1')
+      }
     })
     it('update component should works fine', () => {
-      const newProps = {
-        key: 'key',
-        value: 'update'
-      }
+      // const newProps = {
+      //   key: 'key',
+      //   value: 'update'
+      // }
       // store.commit('updateComponent', newProps)
       // const currentElement: ComponentData = store.getters.getCurrentElement
       // expect(currentElement.props.text).toBe('update')
