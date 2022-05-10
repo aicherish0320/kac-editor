@@ -12,6 +12,7 @@
         :class="{ active: element.id === selectedId }"
         @click="handleClick(element.id)"
       >
+        <!-- 显示隐藏 -->
         <a-tooltip :title="element.isHidden ? '显示' : '隐藏'">
           <a-button
             shape="circle"
@@ -25,6 +26,7 @@
             <template v-slot:icon v-else><EyeInvisibleOutlined /> </template>
           </a-button>
         </a-tooltip>
+        <!-- 解锁、锁定 -->
         <a-tooltip :title="element.isLocked ? '解锁' : '锁定'">
           <a-button
             shape="circle"
@@ -38,6 +40,7 @@
             <template v-slot:icon v-else><LockOutlined /> </template>
           </a-button>
         </a-tooltip>
+        <!-- 修改涂层名称 -->
         <InlineEdit
           class="edit-area"
           :value="element.layerName"
@@ -47,6 +50,7 @@
             }
           "
         ></InlineEdit>
+        <!-- 拖动排序 -->
         <a-tooltip title="拖动排序">
           <a-button shape="circle" class="handle">
             <template v-slot:icon><DragOutlined /> </template

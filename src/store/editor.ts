@@ -141,12 +141,16 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     setActive(state, currentId: string) {
       state.currentElement = currentId
     },
-    updateComponent(state, { key, value }) {
+    updateComponent(state, { key, value, id, isRoot }) {
       const updatedComponent = state.components.find(
-        (component) => component.id === state.currentElement
+        (component) => component.id === (id || state.currentElement)
       )
       if (updatedComponent) {
-        updatedComponent.props[key as keyof TextComponentProps] = value
+        if (isRoot) {
+          ;(updatedComponent as any)[key] = value
+        } else {
+          updatedComponent.props[key as keyof TextComponentProps] = value
+        }
       }
     }
   }
