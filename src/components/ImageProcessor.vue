@@ -117,7 +117,6 @@ export default defineComponent({
         //         }
         //       })
         //       .then((resp) => {
-        //         // context.emit('change', resp.data.data.url)
         //         context.emit('change', resp.data.data.urls[0])
         //         showModal.value = false
         //       })
