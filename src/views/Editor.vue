@@ -47,22 +47,63 @@
         style="background: #fff"
         class="settings-panel"
       >
-        组件属性
+        <a-tabs type="card" v-model:activeKey="activePanel">
+          <a-tab-pane key="component" tab="属性设置" class="no-top-radius">
+            <div v-if="currentElement">
+              <EditGroup
+                v-if="!currentElement.isLocked"
+                :props="currentElement.props"
+                @change="handleChange"
+              ></EditGroup>
+              <div v-else>
+                <a-empty>
+                  <template #description>
+                    <p>该元素被锁定，无法编辑</p>
+                  </template>
+                </a-empty>
+              </div>
+            </div>
+            <pre>
+            {{ currentElement && currentElement.props }}
+          </pre
+            >
+          </a-tab-pane>
+          <a-tab-pane key="layer" tab="图层设置">
+            <template v-if="currentElement">
+              <LayerList
+                :list="components"
+                :selectedId="currentElement && currentElement.id"
+                @change="handleChange"
+                @select="setActive"
+              >
+              </LayerList>
+            </template>
+          </a-tab-pane>
+          <a-tab-pane key="page" tab="页面设置">
+            <template v-if="currentElement">
+              <PropsTable
+                :props="currentElement.props"
+                @change="pageChange"
+              ></PropsTable>
+            </template>
+          </a-tab-pane>
+        </a-tabs>
+        <!-- 组件属性
         <template v-if="currentElement">
           <PropsTable
             :props="currentElement.props"
             @change="pageChange"
           ></PropsTable>
-        </template>
-        <pre>{{ currentElement?.props }}</pre>
+        </template> -->
       </a-layout-sider>
     </a-layout>
+    <!-- <pre>{{ currentElement?.props }}</pre> -->
   </div>
 </template>
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import KaImage from '@/components/KaImage.vue'
@@ -71,7 +112,10 @@ import { defaultTextTemplates } from '@/defaultTemplates'
 import EditWrapper from '@/components/EditWrapper.vue'
 import { ComponentData } from '@/store/editor'
 import PropsTable from '@/components/PropsTable.vue'
+import EditGroup from '../components/EditGroup.vue'
+import LayerList from '../components/LayerList.vue'
 
+export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
   name: 'Editor',
   components: {
@@ -79,7 +123,9 @@ export default defineComponent({
     KaImage,
     ComponentList,
     EditWrapper,
-    PropsTable
+    PropsTable,
+    EditGroup,
+    LayerList
   },
   setup() {
     const store = useStore<GlobalDataProps>()
@@ -87,6 +133,7 @@ export default defineComponent({
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
+    const activePanel = ref<TabType>('component')
 
     const addItem = (component: any) => {
       store.commit('addComponent', component)
@@ -100,13 +147,20 @@ export default defineComponent({
       store.commit('updateComponent', e)
     }
 
+    const handleChange = (e: any) => {
+      console.log('event', e)
+      store.commit('updateComponent', e)
+    }
+
     return {
       components,
       defaultTextTemplates,
       addItem,
       setActive,
       currentElement,
-      pageChange
+      pageChange,
+      activePanel,
+      handleChange
     }
   }
 })

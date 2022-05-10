@@ -1,8 +1,8 @@
 // import { AllComponentProps, TextComponentProps } from '@/defaultProps'
 import {
   AllComponentProps,
-  TextComponentProps,
-  imageDefaultProps
+  TextComponentProps
+  // imageDefaultProps
 } from 'kac-components'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
@@ -66,6 +66,7 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'ka-text',
+    layerName: '图层2',
     props: {
       text: 'hello',
       fontSize: '20px',
@@ -79,6 +80,7 @@ export const testComponents: ComponentData[] = [
   {
     id: uuidv4(),
     name: 'ka-text',
+    layerName: '图层1',
     props: {
       text: 'hello2',
       fontSize: '30px',
