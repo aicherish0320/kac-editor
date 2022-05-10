@@ -31,6 +31,7 @@
           <div class="preview-list" id="canvas-area">
             <EditWrapper
               v-for="component in components"
+              :hidden="component.isHidden"
               :key="component.id"
               :id="component.id"
               :active="component.id === currentElement?.id"

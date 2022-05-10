@@ -4,7 +4,7 @@
     ref="editWrapper"
     :data-component-id="id"
     @click="onItemClick(id)"
-    :class="{ active: active }"
+    :class="{ active: active, hidden: hidden }"
   >
     <slot></slot>
   </div>
@@ -21,6 +21,10 @@ export default defineComponent({
       required: true
     },
     active: {
+      type: Boolean,
+      default: false
+    },
+    hidden: {
       type: Boolean,
       default: false
     }
