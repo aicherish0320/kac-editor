@@ -1,5 +1,5 @@
 <template>
-  <draggable
+  <Draggable
     :list="list"
     class="ant-list-items ant-list-bordered"
     ghost-class="ghost"
@@ -58,11 +58,11 @@
         </a-tooltip>
       </li>
     </template>
-  </draggable>
+  </Draggable>
 </template>
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import draggable from 'vuedraggable'
+import Draggable from 'vuedraggable'
 import {
   EyeOutlined,
   EyeInvisibleOutlined,
@@ -91,7 +91,7 @@ export default defineComponent({
     LockOutlined,
     UnlockOutlined,
     InlineEdit,
-    draggable,
+    Draggable,
     DragOutlined
   },
   setup(props, context) {
