@@ -56,11 +56,42 @@ export interface PageData {
 
 export type AllFormProps = PageProps & AllComponentProps
 
+export interface HistoryProps {
+  id: string
+  componentId: string
+  type: 'add' | 'delete' | 'modify'
+  data: any
+  index?: number
+}
+
+export interface ChannelProps {
+  id: number
+  name: string
+  workId: number
+  status: number
+}
+
 export interface EditorProps {
   // 供中间编辑器渲染的数组
   components: ComponentData[]
   // 当前编辑的是哪个元素，uuid
   currentElement: string
+  // 当然最后保存的时候还有有一些项目信息，这里并没有写出，等做到的时候再补充
+  page: PageData
+  // 当前被复制的组件
+  // copiedComponent?: ComponentData
+  // // 当前操作的历史记录
+  // histories: HistoryProps[]
+  // // 当前历史记录的操作位置
+  // historyIndex: number
+  // // 开始更新时的缓存值
+  // cachedOldValues: any
+  // // 保存最多历史条目记录数
+  // maxHistoryNumber: number
+  // // 数据是否有修改
+  // isDirty: boolean
+  // // 当前 work 的 channels
+  // channels: ChannelProps[]
 }
 
 export const testComponents: ComponentData[] = [
@@ -111,10 +142,23 @@ export const testComponents: ComponentData[] = [
   // { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { ...textDefaultProps, text: 'hello3', fontSize: '15px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
 ]
 
+const pageDefaultProps = {
+  backgroundColor: '#ffffff',
+  backgroundImage:
+    'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg',
+  backgroundRepeat: 'no-repeat',
+  backgroundSize: 'cover',
+  height: '560px'
+}
+
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: testComponents,
-    currentElement: ''
+    currentElement: '',
+    page: {
+      props: pageDefaultProps,
+      title: 'test title'
+    }
   },
   getters: {
     getCurrentElement: (state) => {

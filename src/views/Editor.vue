@@ -82,20 +82,10 @@
           </a-tab-pane>
           <a-tab-pane key="page" tab="页面设置">
             <template v-if="currentElement">
-              <PropsTable
-                :props="currentElement.props"
-                @change="pageChange"
-              ></PropsTable>
+              <PropsTable :props="page.props" @change="pageChange"></PropsTable>
             </template>
           </a-tab-pane>
         </a-tabs>
-        <!-- 组件属性
-        <template v-if="currentElement">
-          <PropsTable
-            :props="currentElement.props"
-            @change="pageChange"
-          ></PropsTable>
-        </template> -->
       </a-layout-sider>
     </a-layout>
     <!-- <pre>{{ currentElement?.props }}</pre> -->
@@ -131,6 +121,7 @@ export default defineComponent({
   setup() {
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
+    const page = computed(() => store.state.editor.page)
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
@@ -160,7 +151,8 @@ export default defineComponent({
       currentElement,
       pageChange,
       activePanel,
-      handleChange
+      handleChange,
+      page
     }
   }
 })

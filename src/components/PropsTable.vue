@@ -37,6 +37,7 @@
 import { TextComponentProps } from '@/defaultProps'
 import IconSwitch from '@/components/IconSwitch.vue'
 import ColorPicker from './ColorPicker.vue'
+import BackgroundProcessor from './BackgroundProcessor.vue'
 import ShadowPicker from './ShadowPicker.vue'
 import RenderVnode from './RenderVNode'
 import { mapPropsToForms } from '@/propsMap'
@@ -67,7 +68,8 @@ export default defineComponent({
     RenderVnode,
     ColorPicker,
     ImageProcessor,
-    ShadowPicker
+    ShadowPicker,
+    BackgroundProcessor
   },
   props: {
     props: {
