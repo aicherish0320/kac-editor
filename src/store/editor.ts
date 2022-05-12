@@ -103,7 +103,7 @@ export const testComponents: ComponentData[] = [
       ...textDefaultProps,
       text: '爱鹊絮',
       fontSize: '30px',
-      color: '#fff'
+      color: '#f00'
     }
   },
   {
@@ -115,7 +115,7 @@ export const testComponents: ComponentData[] = [
       text: '爱鹊絮',
       fontSize: '30px',
       fontWeight: 'bold',
-      color: '#fff'
+      color: '#f00'
     }
   },
   {
@@ -146,8 +146,9 @@ export const testComponents: ComponentData[] = [
 
 const pageDefaultProps = {
   backgroundColor: '#ffffff',
-  backgroundImage:
-    'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
+  backgroundImage: '',
+  // backgroundImage:
+  //   'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px'
@@ -185,12 +186,19 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       const updatedComponent = state.components.find(
         (component) => component.id === (id || state.currentElement)
       )
+      console.log(key, value)
+
       if (updatedComponent) {
         if (isRoot) {
           ;(updatedComponent as any)[key] = value
         } else {
           updatedComponent.props[key as keyof TextComponentProps] = value
         }
+      }
+    },
+    updatePage(state, { key, value }) {
+      if (state.page.props) {
+        state.page.props[key as keyof PageProps] = value
       }
     }
   }

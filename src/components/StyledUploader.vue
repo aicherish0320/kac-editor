@@ -1,7 +1,7 @@
 <template>
   <uploader
     class="styled-uploader"
-    action="http://localhost:3300/api/upload"
+    action="http://localhost:3000/api/utils/upload-img"
     :showUploadList="false"
     :beforeUpload="commonUploadCheck"
     @success="
