@@ -4,11 +4,12 @@
       v-for="(value, key) in finalProps"
       :key="key"
       class="prop-item"
+      :class="{ 'no-text': !value.text }"
       :id="`item-${key}`"
     >
       <template v-if="value">
         <span class="label" v-if="value.text">{{ value.text }}</span>
-        <div class="prop-component">
+        <div :class="`prop-component component-${value.component}`">
           <component
             :is="value.component"
             :[value.valueProp]="value.value"
@@ -36,6 +37,7 @@
 import { TextComponentProps } from '@/defaultProps'
 import IconSwitch from '@/components/IconSwitch.vue'
 import ColorPicker from './ColorPicker.vue'
+import ShadowPicker from './ShadowPicker.vue'
 import RenderVnode from './RenderVNode'
 import { mapPropsToForms } from '@/propsMap'
 import { reduce } from 'lodash'
@@ -64,7 +66,8 @@ export default defineComponent({
     IconSwitch,
     RenderVnode,
     ColorPicker,
-    ImageProcessor
+    ImageProcessor,
+    ShadowPicker
   },
   props: {
     props: {
@@ -80,6 +83,7 @@ export default defineComponent({
         (result, value, key) => {
           const newKey = key as keyof AllComponentProps
           const item = mapPropsToForms[newKey]
+          console.log(item)
 
           if (item) {
             const {

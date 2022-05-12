@@ -1,8 +1,9 @@
 // import { AllComponentProps, TextComponentProps } from '@/defaultProps'
 import {
   AllComponentProps,
-  TextComponentProps
-  // imageDefaultProps
+  TextComponentProps,
+  textDefaultProps,
+  imageDefaultProps
 } from 'kac-components'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
@@ -68,13 +69,9 @@ export const testComponents: ComponentData[] = [
     name: 'ka-text',
     layerName: '图层2',
     props: {
-      text: 'hello',
-      fontSize: '20px',
-      lineHeight: '2',
-      color: '#000000',
-      textAlign: 'right',
-      fontFamily: 'SimHei',
-      fontWeight: 'normal'
+      ...textDefaultProps,
+      text: '爱鹊絮',
+      fontSize: '30px'
     }
   },
   {
@@ -82,12 +79,9 @@ export const testComponents: ComponentData[] = [
     name: 'ka-text',
     layerName: '图层1',
     props: {
-      text: 'hello2',
+      ...textDefaultProps,
+      text: '爱鹊絮',
       fontSize: '30px',
-      lineHeight: '1',
-      color: '#f00',
-      textAlign: 'center',
-      fontFamily: '',
       fontWeight: 'bold'
     }
   },
@@ -96,7 +90,7 @@ export const testComponents: ComponentData[] = [
     name: 'ka-image',
     layerName: '图层4',
     props: {
-      // ...imageDefaultProps,
+      ...imageDefaultProps,
       src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg',
       width: '100px'
     }
