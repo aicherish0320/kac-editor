@@ -146,9 +146,9 @@ export const testComponents: ComponentData[] = [
 
 const pageDefaultProps = {
   backgroundColor: '#ffffff',
-  backgroundImage: '',
-  // backgroundImage:
-  //   'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
+  // backgroundImage: '',
+  backgroundImage:
+    'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px'

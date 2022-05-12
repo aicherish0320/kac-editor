@@ -236,5 +236,16 @@ export const mapPropsToForms: PropsToForms = {
       { value: 'repeat-y', text: 'y轴重复' },
       { value: 'repeat', text: '全部重复' }
     ]
+  },
+  backgroundSize: {
+    ...defaultHandler,
+    component: 'a-select',
+    subComponent: 'a-select-option',
+    text: '背景大小',
+    options: [
+      { value: 'contain', text: '自动缩放' },
+      { value: 'cover', text: '自动填充' },
+      { value: 'none', text: '默认' }
+    ]
   }
 }

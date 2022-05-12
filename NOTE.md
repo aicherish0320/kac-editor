@@ -232,3 +232,11 @@ export default function () {}
   - 浮层消失
   - 被拖动图层状态复原
   - 数据被更新
+
+## 图片裁剪
+
+- 选择 Cropper.js 作为基础库
+- 初始化 Cropper 区域，并且通过事件拿到对应坐标
+- 第一种方式：使用阿里云 OSS 完成裁剪功能
+- 第二种方式：使用 Cropper.js 获取图片数据
+- getCroppedCanvas() -> toBlob() -> 重新上传 Blob 对象
