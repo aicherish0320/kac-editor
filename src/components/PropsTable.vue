@@ -83,7 +83,6 @@ export default defineComponent({
         (result, value, key) => {
           const newKey = key as keyof AllComponentProps
           const item = mapPropsToForms[newKey]
-          console.log(item)
 
           if (item) {
             const {

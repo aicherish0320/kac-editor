@@ -6,7 +6,7 @@
         :key="`item-${index}`"
         :header="item.text"
       >
-        <props-table :props="item.props" @change="handleChange"></props-table>
+        <PropsTable :props="item.props" @change="handleChange"></PropsTable>
       </a-collapse-panel>
     </a-collapse>
   </div>
@@ -70,9 +70,11 @@ export default defineComponent({
   setup(props, context) {
     const currentKey = ref('item-0')
     const newGroups = computed(() => {
+      // 通用属性
       const allNormalProps = props.groups.reduce((prev, current) => {
         return [...prev, ...current.items]
       }, [] as string[])
+      // 特有属性
       const specialProps = difference(Object.keys(props.props), allNormalProps)
       return [
         {
@@ -82,6 +84,7 @@ export default defineComponent({
         ...props.groups
       ]
     })
+
     const editGroups = computed(() => {
       return newGroups.value.map((group) => {
         const propsMap = {} as AllComponentProps
@@ -95,6 +98,7 @@ export default defineComponent({
         }
       })
     })
+
     const handleChange = (e: any) => {
       context.emit('change', e)
     }
