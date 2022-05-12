@@ -215,7 +215,6 @@ export const mapPropsToForms: PropsToForms = {
         const reg = /\(["'](.+)["']\)/g
         const matches = reg.exec(v)
         if (matches && matches.length > 1) {
-          console.log(matches)
           return matches[1]
         } else {
           return ''
@@ -225,5 +224,17 @@ export const mapPropsToForms: PropsToForms = {
       }
     },
     afterTransform: (e: string) => (e ? `url('${e}')` : '')
+  },
+  backgroundRepeat: {
+    ...defaultHandler,
+    component: 'a-select',
+    subComponent: 'a-select-option',
+    text: '背景重复',
+    options: [
+      { value: 'no-repeat', text: '无重复' },
+      { value: 'repeat-y', text: 'x轴重复' },
+      { value: 'repeat-y', text: 'y轴重复' },
+      { value: 'repeat', text: '全部重复' }
+    ]
   }
 }

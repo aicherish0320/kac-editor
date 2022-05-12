@@ -102,7 +102,8 @@ export const testComponents: ComponentData[] = [
     props: {
       ...textDefaultProps,
       text: '爱鹊絮',
-      fontSize: '30px'
+      fontSize: '30px',
+      color: '#fff'
     }
   },
   {
@@ -113,7 +114,8 @@ export const testComponents: ComponentData[] = [
       ...textDefaultProps,
       text: '爱鹊絮',
       fontSize: '30px',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      color: '#fff'
     }
   },
   {
@@ -122,7 +124,7 @@ export const testComponents: ComponentData[] = [
     layerName: '图层4',
     props: {
       ...imageDefaultProps,
-      src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg',
+      src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/backet-019541.png',
       width: '100px'
     }
   }
@@ -145,7 +147,7 @@ export const testComponents: ComponentData[] = [
 const pageDefaultProps = {
   backgroundColor: '#ffffff',
   backgroundImage:
-    'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg',
+    'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px'

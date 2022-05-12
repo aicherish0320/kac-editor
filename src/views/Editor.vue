@@ -11,6 +11,7 @@
               class="logo-img"
             />
           </router-link>
+          <InlineEdit :value="page.title" @change="titleChange" />
         </div>
       </a-layout-header>
     </a-layout>
@@ -29,16 +30,18 @@
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <div class="preview-list" id="canvas-area">
-            <EditWrapper
-              v-for="component in components"
-              :hidden="component.isHidden"
-              :key="component.id"
-              :id="component.id"
-              :active="component.id === currentElement?.id"
-              @set-active="setActive"
-            >
-              <component :is="component.name" v-bind="component.props" />
-            </EditWrapper>
+            <div class="body-container" :style="page.props">
+              <EditWrapper
+                v-for="component in components"
+                :hidden="component.isHidden"
+                :key="component.id"
+                :id="component.id"
+                :active="component.id === currentElement?.id"
+                @set-active="setActive"
+              >
+                <component :is="component.name" v-bind="component.props" />
+              </EditWrapper>
+            </div>
           </div>
         </a-layout-content>
       </a-layout>
@@ -70,20 +73,16 @@
             >
           </a-tab-pane>
           <a-tab-pane key="layer" tab="图层设置">
-            <template v-if="currentElement">
-              <LayerList
-                :list="components"
-                :selectedId="currentElement && currentElement.id"
-                @change="handleChange"
-                @select="setActive"
-              >
-              </LayerList>
-            </template>
+            <LayerList
+              :list="components"
+              :selectedId="currentElement && currentElement.id"
+              @change="handleChange"
+              @select="setActive"
+            >
+            </LayerList>
           </a-tab-pane>
           <a-tab-pane key="page" tab="页面设置">
-            <template v-if="currentElement">
-              <PropsTable :props="page.props" @change="pageChange"></PropsTable>
-            </template>
+            <PropsTable :props="page.props" @change="pageChange"></PropsTable>
           </a-tab-pane>
         </a-tabs>
       </a-layout-sider>
@@ -105,6 +104,7 @@ import { ComponentData } from '@/store/editor'
 import PropsTable from '@/components/PropsTable.vue'
 import EditGroup from '../components/EditGroup.vue'
 import LayerList from '../components/LayerList.vue'
+import InlineEdit from '@/components/InlineEdit.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -116,7 +116,8 @@ export default defineComponent({
     EditWrapper,
     PropsTable,
     EditGroup,
-    LayerList
+    LayerList,
+    InlineEdit
   },
   setup() {
     const store = useStore<GlobalDataProps>()
