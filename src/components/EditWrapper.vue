@@ -52,14 +52,40 @@ export default defineComponent({
       y: 0
     }
 
+    const calculateMovePosition = (e: MouseEvent) => {
+      const container = document.getElementById('canvas-area')
+      const containerOffsetLeft = container?.offsetLeft || 0
+      const containerOffsetTop = container?.offsetTop || 0
+      const left = e.clientX - gap.x - containerOffsetLeft
+      const top = e.clientY - gap.y - containerOffsetTop
+
+      return {
+        left,
+        top
+      }
+    }
+
     const startMove = (e: MouseEvent) => {
       const currentElement = editWrapper.value
       if (currentElement) {
         const { left, top } = currentElement.getBoundingClientRect()
         gap.x = e.clientX - left
         gap.y = e.clientY - top
-        console.log(gap)
+        console.log(e.clientX, left)
       }
+      const handleMove = (e: MouseEvent) => {
+        const { left, top } = calculateMovePosition(e)
+        if (currentElement) {
+          currentElement.style.top = top + 'px'
+          currentElement.style.left = left + 'px'
+        }
+      }
+      const handleMouseUp = (e: MouseEvent) => {
+        document.removeEventListener('mousemove', handleMove)
+      }
+
+      document.addEventListener('mousemove', handleMove)
+      document.addEventListener('mouseup', handleMouseUp)
     }
 
     return {
