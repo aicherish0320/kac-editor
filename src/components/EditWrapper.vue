@@ -4,14 +4,17 @@
     ref="editWrapper"
     :data-component-id="id"
     @click="onItemClick(id)"
+    :style="styles"
     :class="{ active: active, hidden: hidden }"
+    @mousedown="startMove"
   >
     <slot></slot>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
+import { pick } from 'lodash-es'
 
 export default defineComponent({
   name: 'EditWrapper',
@@ -27,15 +30,43 @@ export default defineComponent({
     hidden: {
       type: Boolean,
       default: false
+    },
+    props: {
+      type: Object
     }
   },
   emits: ['set-active'],
   setup(props, context) {
+    const editWrapper = ref<null | HTMLElement>(null)
+
     const onItemClick = (id: string) => {
       context.emit('set-active', id)
     }
+
+    const styles = computed(() =>
+      pick(props.props, ['position', 'top', 'left', 'width', 'height'])
+    )
+
+    const gap = {
+      x: 0,
+      y: 0
+    }
+
+    const startMove = (e: MouseEvent) => {
+      const currentElement = editWrapper.value
+      if (currentElement) {
+        const { left, top } = currentElement.getBoundingClientRect()
+        gap.x = e.clientX - left
+        gap.y = e.clientY - top
+        console.log(gap)
+      }
+    }
+
     return {
-      onItemClick
+      onItemClick,
+      styles,
+      editWrapper,
+      startMove
     }
   }
 })
@@ -50,9 +81,9 @@ export default defineComponent({
   box-sizing: content-box !important;
 }
 .edit-wrapper > * {
-  /* position: static !important; */
-  /* width: 100% !important; */
-  /* height: 100% !important; */
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 .edit-wrapper:hover {
   border: 1px dashed #ccc;

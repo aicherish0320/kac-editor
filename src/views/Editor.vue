@@ -37,6 +37,7 @@
                 :key="component.id"
                 :id="component.id"
                 :active="component.id === currentElement?.id"
+                :props="component.props"
                 @set-active="setActive"
               >
                 <component :is="component.name" v-bind="component.props" />

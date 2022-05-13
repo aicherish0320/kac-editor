@@ -51,6 +51,6 @@ button.ka-text-component {
 .ka-text-component {
   box-sizing: border-box;
   white-space: pre-wrap;
-  position: relative !important;
+  /* position: relative !important; */
 }
 </style>

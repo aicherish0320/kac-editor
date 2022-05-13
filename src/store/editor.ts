@@ -103,31 +103,36 @@ export const testComponents: ComponentData[] = [
       ...textDefaultProps,
       text: '爱鹊絮',
       fontSize: '30px',
-      color: '#f00'
-    }
-  },
-  {
-    id: uuidv4(),
-    name: 'ka-text',
-    layerName: '图层1',
-    props: {
-      ...textDefaultProps,
-      text: '爱鹊絮',
-      fontSize: '30px',
-      fontWeight: 'bold',
-      color: '#f00'
-    }
-  },
-  {
-    id: uuidv4(),
-    name: 'ka-image',
-    layerName: '图层4',
-    props: {
-      ...imageDefaultProps,
-      src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/backet-019541.png',
-      width: '100px'
+      color: '#f00',
+      width: '100px',
+      height: '100px',
+      top: '20px',
+      left: '20px',
+      backgroundColor: '#ccc'
     }
   }
+  // {
+  //   id: uuidv4(),
+  //   name: 'ka-text',
+  //   layerName: '图层1',
+  //   props: {
+  //     ...textDefaultProps,
+  //     text: '爱鹊絮',
+  //     fontSize: '30px',
+  //     fontWeight: 'bold',
+  //     color: '#f00'
+  //   }
+  // },
+  // {
+  //   id: uuidv4(),
+  //   name: 'ka-image',
+  //   layerName: '图层4',
+  //   props: {
+  //     ...imageDefaultProps,
+  //     src: 'https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/backet-019541.png',
+  //     width: '100px'
+  //   }
+  // }
 
   // {
   //   id: uuidv4(),

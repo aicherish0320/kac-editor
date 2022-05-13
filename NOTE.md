@@ -255,3 +255,12 @@ export default function () {}
 - 函数节流
 - 右键菜单的实现
 - 函数式创建组件的方式
+
+### 拖拽方案
+
+- h5 dragable
+  - 缺点：样式不好自定义
+- 自己实现
+  - MouseDown 后开始操作
+  - 添加 MouseMove 监控更新 top、left 值，拖动过程中，可以使用的值就是鼠标的坐标
+  - MouseUp 清除事件，周期完成
