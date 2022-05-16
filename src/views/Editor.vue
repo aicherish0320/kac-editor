@@ -39,6 +39,7 @@
                 :active="component.id === currentElement?.id"
                 :props="component.props"
                 @set-active="setActive"
+                @update-position="updatePosition"
               >
                 <component :is="component.name" v-bind="component.props" />
               </EditWrapper>
@@ -106,6 +107,7 @@ import PropsTable from '@/components/PropsTable.vue'
 import EditGroup from '../components/EditGroup.vue'
 import LayerList from '../components/LayerList.vue'
 import InlineEdit from '@/components/InlineEdit.vue'
+import { forEach, pickBy } from 'lodash'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -144,6 +146,17 @@ export default defineComponent({
     const handleChange = (e: any) => {
       store.commit('updateComponent', e)
     }
+    const updatePosition = (data: {
+      left: number
+      top: number
+      id: string
+    }) => {
+      const { id } = data
+      const updateData = pickBy<number>(data, (_, k) => k !== 'id')
+      forEach(updateData, (v, key) => {
+        store.commit('updateComponent', { key, value: v + 'px', id })
+      })
+    }
 
     return {
       components,
@@ -154,7 +167,8 @@ export default defineComponent({
       pageChange,
       activePanel,
       handleChange,
-      page
+      page,
+      updatePosition
     }
   }
 })

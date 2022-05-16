@@ -75,6 +75,7 @@ export default defineComponent({
       x: 0,
       y: 0
     }
+    let isMoving = false
 
     const calculateMovePosition = (e: MouseEvent) => {
       const container = document.getElementById('canvas-area')
@@ -95,10 +96,10 @@ export default defineComponent({
         const { left, top } = currentElement.getBoundingClientRect()
         gap.x = e.clientX - left
         gap.y = e.clientY - top
-        console.log(e.clientX, left)
       }
       const handleMove = (e: MouseEvent) => {
         const { left, top } = calculateMovePosition(e)
+        isMoving = true
         if (currentElement) {
           currentElement.style.top = top + 'px'
           currentElement.style.left = left + 'px'
@@ -106,6 +107,14 @@ export default defineComponent({
       }
       const handleMouseUp = (e: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove)
+        if (isMoving) {
+          const { left, top } = calculateMovePosition(e)
+          context.emit('update-position', { left, top, id: props.id })
+          isMoving = false
+        }
+        nextTick(() => {
+          document.removeEventListener('mouseup', handleMouseUp)
+        })
       }
 
       document.addEventListener('mousemove', handleMove)
@@ -158,7 +167,6 @@ export default defineComponent({
       const currentElement = editWrapper.value as HTMLElement
       const { left, right, top, bottom } =
         currentElement.getBoundingClientRect()
-      console.log(left, right, top, bottom)
 
       const handleMove = (e: MouseEvent) => {
         const size = calculateSize(direction, e, { left, right, top, bottom })
