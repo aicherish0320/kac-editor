@@ -107,6 +107,7 @@ import PropsTable from '@/components/PropsTable.vue'
 import EditGroup from '../components/EditGroup.vue'
 import LayerList from '../components/LayerList.vue'
 import InlineEdit from '@/components/InlineEdit.vue'
+import initHotKeys from '@/plugins/hotKeys'
 import { forEach, pickBy } from 'lodash'
 
 export type TabType = 'component' | 'layer' | 'page'
@@ -123,6 +124,7 @@ export default defineComponent({
     InlineEdit
   },
   setup() {
+    initHotKeys()
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)

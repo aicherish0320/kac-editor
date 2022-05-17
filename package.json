@@ -12,6 +12,7 @@
     "ant-design-vue": "^2.2.8",
     "axios": "^0.26.1",
     "cropperjs": "^1.5.12",
+    "hotkeys-js": "^3.9.3",
     "kac-components": "^1.0.3",
     "lodash-es": "^4.17.21",
     "rgb-hex": "^4.0.0",

@@ -264,3 +264,18 @@ export default function () {}
   - MouseDown 后开始操作
   - 添加 MouseMove 监控更新 top、left 值，拖动过程中，可以使用的值就是鼠标的坐标
   - MouseUp 清除事件，周期完成
+
+### 快捷键操作
+
+- 拷贝图层
+- 粘贴图层
+- 删除图层
+- 取消选中
+
+### 元素移动
+
+- 上下左右移动
+
+### 撤销/重做
+
+HotKeys.js 好用的按键响应库

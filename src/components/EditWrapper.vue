@@ -78,11 +78,11 @@ export default defineComponent({
     let isMoving = false
 
     const calculateMovePosition = (e: MouseEvent) => {
-      const container = document.getElementById('canvas-area')
+      const container = document.getElementById('canvas-area') as HTMLElement
       const containerOffsetLeft = container?.offsetLeft || 0
       const containerOffsetTop = container?.offsetTop || 0
       const left = e.clientX - gap.x - containerOffsetLeft
-      const top = e.clientY - gap.y - containerOffsetTop
+      const top = e.clientY - gap.y - containerOffsetTop + container.scrollTop
 
       return {
         left,
@@ -107,6 +107,7 @@ export default defineComponent({
       }
       const handleMouseUp = (e: MouseEvent) => {
         document.removeEventListener('mousemove', handleMove)
+        // 防止直接点击更新 只有移动过后才更新
         if (isMoving) {
           const { left, top } = calculateMovePosition(e)
           context.emit('update-position', { left, top, id: props.id })
