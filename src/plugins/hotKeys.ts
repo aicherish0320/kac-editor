@@ -18,4 +18,32 @@ export default function initHotKeys() {
   useHotKey('esc', () => {
     store.commit('setActive', '')
   })
+  useHotKey('up', () => {
+    store.commit('moveComponent', {
+      direction: 'Up',
+      amount: 1,
+      id: currentId.value
+    })
+  })
+  useHotKey('down', () => {
+    store.commit('moveComponent', {
+      direction: 'Down',
+      amount: 1,
+      id: currentId.value
+    })
+  })
+  useHotKey('left', () => {
+    store.commit('moveComponent', {
+      direction: 'Left',
+      amount: 1,
+      id: currentId.value
+    })
+  })
+  useHotKey('right', () => {
+    store.commit('moveComponent', {
+      direction: 'Right',
+      amount: 1,
+      id: currentId.value
+    })
+  })
 }

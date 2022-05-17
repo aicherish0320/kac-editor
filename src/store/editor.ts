@@ -9,7 +9,9 @@ import {
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
-import { GlobalDataProps } from '.'
+import store, { GlobalDataProps } from '.'
+
+export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 
 export interface ComponentData {
   // 这个元素的 属性，属性请详见下面
@@ -175,6 +177,11 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       return state.components.find(
         (component) => component.id === state.currentElement
       )
+    },
+    getElement: (state, id: string | undefined) => {
+      state.components.find(
+        (component) => component.id === (id || state.currentElement)
+      )
     }
   },
   mutations: {
@@ -215,8 +222,64 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         const currentIndex = state.components.findIndex(
           (component) => component.id === id
         )
-        state.components.splice(currentIndex, 1)
-        message.success('删除成功', 1)
+        state.components = state.components.filter(
+          (component) => component.id !== id
+        )
+        message.success('删除当前图层成功', 1)
+      }
+    },
+    moveComponent(
+      state,
+      data: { direction: MoveDirection; amount: number; id: string }
+    ) {
+      const currentComponent = state.components.find(
+        (component) => component.id === data.id
+      )
+      if (currentComponent) {
+        const oldTop = parseInt(currentComponent.props.top || '0')
+        const oldLeft = parseInt(currentComponent.props.left || '0')
+        const { direction, amount } = data
+        switch (direction) {
+          case 'Up': {
+            const newValue = oldTop - amount + 'px'
+            store.commit('updateComponent', {
+              key: 'top',
+              value: newValue,
+              id: data.id
+            })
+            break
+          }
+          case 'Down': {
+            const newValue = oldTop + amount + 'px'
+            store.commit('updateComponent', {
+              key: 'top',
+              value: newValue,
+              id: data.id
+            })
+            break
+          }
+          case 'Left': {
+            const newValue = oldLeft - amount + 'px'
+            store.commit('updateComponent', {
+              key: 'left',
+              value: newValue,
+              id: data.id
+            })
+            break
+          }
+          case 'Right': {
+            const newValue = oldLeft + amount + 'px'
+            store.commit('updateComponent', {
+              key: 'left',
+              value: newValue,
+              id: data.id
+            })
+            break
+          }
+
+          default:
+            break
+        }
       }
     },
     updateComponent(state, { key, value, id, isRoot }) {
