@@ -186,11 +186,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
   },
   mutations: {
     addComponent(state, component: ComponentData) {
-      // const newComponent: ComponentData = {
-      //   id: uuidv4(),
-      //   name: 'ka-text',
-      //   props
-      // }
+      component.layerName = `图层` + state.components.length + 1
       state.components.push(component)
     },
     setActive(state, currentId: string) {
