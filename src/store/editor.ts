@@ -1,4 +1,5 @@
 // import { AllComponentProps, TextComponentProps } from '@/defaultProps'
+import { insertAt } from '@/helper'
 import { message } from 'ant-design-vue'
 import {
   AllComponentProps,
@@ -12,6 +13,14 @@ import { Module } from 'vuex'
 import store, { GlobalDataProps } from '.'
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
+
+export interface HistoryProps {
+  id: string
+  componentId: string
+  type: 'add' | 'delete' | 'modify'
+  data: any
+  index?: number
+}
 
 export interface ComponentData {
   // 这个元素的 属性，属性请详见下面
@@ -84,10 +93,10 @@ export interface EditorProps {
   page: PageData
   // 当前被复制的组件
   copiedComponent?: ComponentData
-  // // 当前操作的历史记录
-  // histories: HistoryProps[]
-  // // 当前历史记录的操作位置
-  // historyIndex: number
+  // 当前操作的历史记录
+  histories: HistoryProps[]
+  // 当前历史记录的操作位置
+  historyIndex: number
   // // 开始更新时的缓存值
   // cachedOldValues: any
   // // 保存最多历史条目记录数
@@ -163,6 +172,12 @@ const pageDefaultProps = {
   height: '560px'
 }
 
+// const modifyHistory = (
+//   state: EditorProps,
+//   history: HistoryProps,
+//   type: 'undo' | 'redo'
+// ) => {}
+
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: testComponents,
@@ -170,7 +185,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     page: {
       props: pageDefaultProps,
       title: 'test title'
-    }
+    },
+    histories: [],
+    historyIndex: -1
   },
   getters: {
     getCurrentElement: (state) => {
@@ -188,9 +205,60 @@ const editor: Module<EditorProps, GlobalDataProps> = {
     addComponent(state, component: ComponentData) {
       component.layerName = `图层` + state.components.length + 1
       state.components.push(component)
+      // history
+      state.histories.push({
+        id: uuidv4(),
+        componentId: component.id,
+        type: 'add',
+        data: cloneDeep(component)
+      })
     },
     setActive(state, currentId: string) {
       state.currentElement = currentId
+    },
+    undo(state) {
+      // never undo before
+      if (state.historyIndex === -1) {
+        // undo the last item of array
+        state.historyIndex = state.histories.length - 1
+      } else {
+        // undo to the previous step
+        state.historyIndex--
+      }
+      // get the history record
+      const history = state.histories[state.historyIndex]
+      switch (history.type) {
+        case 'add':
+          // if create a component, we should remove it
+          state.components = state.components.filter(
+            (component) => component.id !== history.componentId
+          )
+          break
+        case 'delete':
+          // if delete a component, we should restore it to the right position
+          state.components = insertAt(
+            state.components,
+            history.index as number,
+            history.data
+          )
+          break
+        case 'modify': {
+          // modifyHistory(state, history, 'undo')
+          const { componentId, data } = history
+          const { key, oldValue } = data
+
+          const updatedComponent = state.components.find(
+            (component) => component.id === componentId
+          )
+
+          if (updatedComponent) {
+            updatedComponent.props[key as keyof AllComponentProps] = oldValue
+          }
+          break
+        }
+        default:
+          break
+      }
     },
     copyComponent(state, id) {
       const currentComponent = state.components.find(
@@ -215,12 +283,21 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         (component) => component.id === id
       )
       if (currentComponent) {
-        const currentIndex = state.components.findIndex(
+        const componentIndex = state.components.findIndex(
           (component) => component.id === id
         )
         state.components = state.components.filter(
           (component) => component.id !== id
         )
+        // history
+        state.histories.push({
+          id: uuidv4(),
+          componentId: currentComponent.id,
+          type: 'delete',
+          data: currentComponent,
+          index: componentIndex
+        })
+
         message.success('删除当前图层成功', 1)
       }
     },
@@ -286,7 +363,20 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         if (isRoot) {
           ;(updatedComponent as any)[key] = value
         } else {
+          // history
+          const oldValue =
+            updatedComponent.props[key as keyof TextComponentProps]
           updatedComponent.props[key as keyof TextComponentProps] = value
+          state.histories.push({
+            id: uuidv4(),
+            componentId: id || state.currentElement,
+            type: 'modify',
+            data: {
+              oldValue,
+              newValue: value,
+              key
+            }
+          })
         }
       }
     },
