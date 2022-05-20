@@ -279,3 +279,32 @@ export default function () {}
 ### 撤销/重做
 
 HotKeys.js 好用的按键响应库
+
+## 大型项目等编译，部署以及性能优化
+
+优化的手段本质就是：减少代码体积，加快响应速度
+
+- VueCLI 编译不同环境的代码
+  - 几种环境的概念
+  - Vue CLI 中的模式
+  - 使用环境变量文件
+- Webpack
+  - 基础
+  - 手写一个 Loader
+  - 手写一个 Plugin
+- 个性化 VueCli 编译来完成打包分析和优化
+  - Vue.config.js
+  - 安装分析插件 - Webpack-bundle-analyzer
+  - 各种 Webpack 打包优化策略，我们采用渐进式的几种方式不断优化
+- 部署以及 HTTP 传输优化
+  - Nginx 安装和简介
+  - 使用 HTTP 缓存 expires 到 cache-control
+  - 使用 HTTP 数据压缩 gzip 到 Brotil 到静态资源
+  - 使用 HTTP 协议特性从 keep-alive 到 http/2
+
+## 应用部署流程
+
+### 构建
+
+JavaScript 语言本身是不需要编译的
+但是现代的前端项目使用的语言和或者模块系统都无法在浏览器中使用，都需要使用特定的 bundler 将源代码最终转换为浏览器支持的 Javascript 代码
