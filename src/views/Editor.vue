@@ -29,6 +29,7 @@
       <a-layout style="padding: 0 24px 24px">
         <a-layout-content class="preview-container">
           <p>画布区域</p>
+          <HistoryArea></HistoryArea>
           <div class="preview-list" id="canvas-area">
             <div class="body-container" :style="page.props">
               <EditWrapper
@@ -109,6 +110,7 @@ import LayerList from '../components/LayerList.vue'
 import InlineEdit from '@/components/InlineEdit.vue'
 import initHotKeys from '@/plugins/hotKeys'
 import { forEach, pickBy } from 'lodash'
+import HistoryArea from '@/components/HistoryArea.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -121,7 +123,8 @@ export default defineComponent({
     PropsTable,
     EditGroup,
     LayerList,
-    InlineEdit
+    InlineEdit,
+    HistoryArea
   },
   setup() {
     initHotKeys()

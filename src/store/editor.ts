@@ -199,6 +199,24 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       state.components.find(
         (component) => component.id === (id || state.currentElement)
       )
+    },
+    checkUndoDisable(state) {
+      // 1 no history item
+      // 2 move to the first item
+      if (state.histories.length === 0 || state.historyIndex === 0) {
+        return true
+      }
+      return false
+    },
+    checkRedoDisable(state) {
+      if (
+        state.histories.length === 0 ||
+        state.historyIndex === state.histories.length ||
+        state.historyIndex === -1
+      ) {
+        return true
+      }
+      return false
     }
   },
   mutations: {
@@ -259,6 +277,33 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         default:
           break
       }
+    },
+    redo(state) {
+      // can't redo when historyIndex is the last item or historyIndex is never moved
+      if (state.historyIndex === -1) {
+        return
+      }
+      // get the record
+      const history = state.histories[state.historyIndex]
+      // process the history data
+      switch (history.type) {
+        case 'add':
+          state.components.push(history.data)
+          // state.components = insertAt(state.components, history.index as number, history.data)
+          break
+        case 'delete':
+          state.components = state.components.filter(
+            (component) => component.id !== history.componentId
+          )
+          break
+        case 'modify': {
+          // modifyHistory(state, history, 'redo')
+          break
+        }
+        default:
+          break
+      }
+      state.historyIndex++
     },
     copyComponent(state, id) {
       const currentComponent = state.components.find(
