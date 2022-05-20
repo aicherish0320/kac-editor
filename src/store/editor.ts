@@ -76,6 +76,17 @@ export interface PageData {
 
 export type AllFormProps = PageProps & AllComponentProps
 
+const debounceChange = (callback: (...args: any) => void, timeout = 1000) => {
+  let timer = 0
+  return (...args: any) => {
+    clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      timer = 0
+      callback(...args)
+    }, timeout)
+  }
+}
+
 export interface HistoryProps {
   id: string
   componentId: string
@@ -104,10 +115,10 @@ export interface EditorProps {
   histories: HistoryProps[]
   // 当前历史记录的操作位置
   historyIndex: number
-  // // 开始更新时的缓存值
-  // cachedOldValues: any
-  // // 保存最多历史条目记录数
-  // maxHistoryNumber: number
+  // 开始更新时的缓存值
+  cachedOldValues: any
+  // 保存最多历史条目记录数
+  maxHistoryNumber: number
   // // 数据是否有修改
   // isDirty: boolean
   // // 当前 work 的 channels
@@ -203,6 +214,41 @@ const modifyHistory = (
   }
 }
 
+const pushHistory = (state: EditorProps, historyRecord: HistoryProps) => {
+  // check historyIndex is already moved
+  if (state.historyIndex !== -1) {
+    // if moved, delete all the records greater than the index
+    state.histories = state.histories.slice(0, state.historyIndex)
+    // move historyIndex to unmoved
+    state.historyIndex = -1
+  }
+  // check length
+  if (state.histories.length < state.maxHistoryNumber) {
+    state.histories.push(historyRecord)
+  } else {
+    // larger than max number
+    // shift the first
+    // push to last
+    state.histories.shift()
+    state.histories.push(historyRecord)
+  }
+}
+
+const pushModifyHistory = (
+  state: EditorProps,
+  { key, value, id }: UpdateComponentData
+) => {
+  pushHistory(state, {
+    id: uuidv4(),
+    componentId: id || state.currentElement,
+    type: 'modify',
+    data: { oldValue: state.cachedOldValues, newValue: value, key }
+  })
+  state.cachedOldValues = null
+}
+
+const pushHistoryDebounce = debounceChange(pushModifyHistory)
+
 const editor: Module<EditorProps, GlobalDataProps> = {
   state: {
     components: testComponents,
@@ -212,7 +258,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       title: 'test title'
     },
     histories: [],
-    historyIndex: -1
+    historyIndex: -1,
+    cachedOldValues: null,
+    maxHistoryNumber: 5
   },
   getters: {
     getCurrentElement: (state) => {
@@ -429,16 +477,11 @@ const editor: Module<EditorProps, GlobalDataProps> = {
             ? key.map((key) => updatedComponent.props[key])
             : updatedComponent.props[key]
 
-          state.histories.push({
-            id: uuidv4(),
-            componentId: id || state.currentElement,
-            type: 'modify',
-            data: {
-              oldValue,
-              newValue: value,
-              key
-            }
-          })
+          if (!state.cachedOldValues) {
+            state.cachedOldValues = oldValue
+          }
+
+          pushHistoryDebounce(state, { key, value, id })
 
           if (Array.isArray(key) && Array.isArray(value)) {
             key.forEach((keyName, index) => {
