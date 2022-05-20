@@ -109,7 +109,7 @@ import EditGroup from '../components/EditGroup.vue'
 import LayerList from '../components/LayerList.vue'
 import InlineEdit from '@/components/InlineEdit.vue'
 import initHotKeys from '@/plugins/hotKeys'
-import { forEach, pickBy } from 'lodash'
+import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
@@ -157,10 +157,10 @@ export default defineComponent({
       id: string
     }) => {
       const { id } = data
-      const updateData = pickBy<number>(data, (_, k) => k !== 'id')
-      forEach(updateData, (v, key) => {
-        store.commit('updateComponent', { key, value: v + 'px', id })
-      })
+      const updatedData = pickBy<number>(data, (_, k) => k !== 'id')
+      const keysArr = Object.keys(updatedData)
+      const valuesArr = Object.values(updatedData).map((v) => v + 'px')
+      store.commit('updateComponent', { key: keysArr, value: valuesArr, id })
     }
 
     return {

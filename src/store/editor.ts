@@ -14,6 +14,13 @@ import store, { GlobalDataProps } from '.'
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 
+export interface UpdateComponentData {
+  key: keyof AllComponentProps | Array<keyof AllComponentProps>
+  value: string | string[]
+  id: string
+  isRoot?: boolean
+}
+
 export interface HistoryProps {
   id: string
   componentId: string
@@ -400,18 +407,19 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         }
       }
     },
-    updateComponent(state, { key, value, id, isRoot }) {
+    updateComponent(state, { key, value, id, isRoot }: UpdateComponentData) {
       const updatedComponent = state.components.find(
         (component) => component.id === (id || state.currentElement)
       )
       if (updatedComponent) {
         if (isRoot) {
-          ;(updatedComponent as any)[key] = value
+          ;(updatedComponent as any)[key as string] = value
         } else {
           // history
-          const oldValue =
-            updatedComponent.props[key as keyof TextComponentProps]
-          updatedComponent.props[key as keyof TextComponentProps] = value
+          const oldValue = Array.isArray(key)
+            ? key.map((key) => updatedComponent.props[key])
+            : updatedComponent.props[key]
+
           state.histories.push({
             id: uuidv4(),
             componentId: id || state.currentElement,
@@ -422,6 +430,14 @@ const editor: Module<EditorProps, GlobalDataProps> = {
               key
             }
           })
+
+          if (Array.isArray(key) && Array.isArray(value)) {
+            key.forEach((keyName, index) => {
+              updatedComponent.props[keyName] = value[index]
+            })
+          } else if (typeof key === 'string' && typeof value === 'string') {
+            updatedComponent.props[key] = value
+          }
         }
       }
     },
