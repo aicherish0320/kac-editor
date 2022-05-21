@@ -111,6 +111,7 @@ import InlineEdit from '@/components/InlineEdit.vue'
 import initHotKeys from '@/plugins/hotKeys'
 import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
+import initContextMenu from '@/plugins/contextMenu'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -128,6 +129,7 @@ export default defineComponent({
   },
   setup() {
     initHotKeys()
+    initContextMenu()
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
