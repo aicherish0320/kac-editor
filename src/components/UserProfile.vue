@@ -48,9 +48,9 @@ export default defineComponent({
     }
     const logout = () => {
       store.commit('logout')
-      message.success('退出登录成功，2秒后跳转到首页', 2)
+      message.success('退出登录成功，2秒后跳转到登陆页', 2)
       setTimeout(() => {
-        router.push('/')
+        router.push('/login')
       }, 2000)
     }
     return {

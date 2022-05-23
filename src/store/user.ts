@@ -43,7 +43,7 @@ const user: Module<UserProps, GlobalDataProps> = {
     logout(state) {
       state.token = ''
       state.isLogin = false
-      localStorage.removeItem('token')
+      localStorage.removeItem('kac_token')
       delete axios.defaults.headers.common.Authorization
     }
   },
