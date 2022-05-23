@@ -10,7 +10,7 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
 import 'cropperjs/dist/cropper.css'
-
+// http://182.92.168.192:8081
 const app = createApp(App)
 
 app.use(Antd).use(KacComponents).use(store).use(router)
