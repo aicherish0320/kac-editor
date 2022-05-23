@@ -10,26 +10,34 @@ const initContextMenu = () => {
       action: (cid) => {
         store.commit('deleteComponent', cid)
       }
-    }
-  ]
-
-  const testActions2: ActionItem[] = [
+    },
     {
-      shortcut: 'Ctrl+C',
-      text: '复制配置',
+      shortcut: 'esc',
+      text: '取消选中',
       action: () => {
-        console.log(2)
+        store.commit('setActive', '')
       }
     }
   ]
-  let destory: any, destory2: any
+
+  // const testActions2: ActionItem[] = [
+  //   {
+  //     shortcut: 'Ctrl+C',
+  //     text: '复制配置',
+  //     action: () => {
+  //       console.log(2)
+  //     }
+  //   }
+  // ]
+  let destroy: any
+  // , destroy2: any
   onMounted(() => {
-    destory = createContextMenu(testActions)
-    destory2 = createContextMenu(testActions2, 'settings-panel')
+    destroy = createContextMenu(testActions)
+    // destroy2 = createContextMenu(testActions2, 'settings-panel')
   })
   onUnmounted(() => {
-    destory()
-    destory2()
+    destroy()
+    // destroy2()
   })
 }
 
