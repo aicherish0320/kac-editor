@@ -25,6 +25,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'editor',
     component: () => import('../views/Editor.vue'),
     meta: { requiredLogin: true, title: '编辑我的设计' }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/Login.vue'),
+    meta: {
+      redirectAlreadyLogin: true,
+      title: '登录到爱鹊絮',
+      disableLoading: true
+    }
   }
 ]
 

@@ -1,5 +1,7 @@
+import axios from 'axios'
 import { Module } from 'vuex'
-import { GlobalDataProps } from '.'
+import { actionWrapper, GlobalDataProps } from './index'
+import { RespData } from './respTypes'
 
 export interface UserDataProps {
   username?: string
@@ -24,15 +26,36 @@ export interface UserProps {
 const user: Module<UserProps, GlobalDataProps> = {
   state: {
     isLogin: false,
+    token: '',
     data: {}
   },
   mutations: {
-    login(state) {
+    login(state, rawData: RespData<{ token: string }>) {
+      const { token } = rawData.data
+      state.token = token
+      localStorage.setItem('kac_token', token)
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+    },
+    fetchCurrentUser(state, rawData: RespData<UserDataProps>) {
       state.isLogin = true
-      state.data.nickName = 'aicherish'
+      state.data = { ...rawData.data }
     },
     logout(state) {
+      state.token = ''
       state.isLogin = false
+      localStorage.removeItem('token')
+      delete axios.defaults.headers.common.Authorization
+    }
+  },
+  actions: {
+    login: actionWrapper('/users/loginByPhoneNumber', 'login', {
+      method: 'post'
+    }),
+    fetchCurrentUser: actionWrapper('/users/getUserInfo', 'fetchCurrentUser'),
+    loginAndFetch({ dispatch }, loginData) {
+      return dispatch('login', loginData).then(() => {
+        return dispatch('fetchCurrentUser')
+      })
     }
   }
 }
