@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue'
+import { computed, defineComponent, onMounted } from 'vue'
 import TemplateList from '@/components/TemplateList.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
@@ -20,6 +20,10 @@ export default defineComponent({
   components: { TemplateList },
   setup() {
     const store = useStore<GlobalDataProps>()
+
+    onMounted(() => {
+      store.dispatch('fetchTemplates')
+    })
 
     const testData = computed(() => store.state.templates.data)
 
