@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
 import store, { GlobalDataProps } from '.'
+import { RespWorkData } from './respTypes'
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 
@@ -497,6 +498,38 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       if (state.page.props) {
         state.page.props[key as keyof PageProps] = value
       }
+    },
+    /*
+      Editor 中的数据结构
+      {
+        page: {
+          id: '',
+          title: ''
+          props: {
+            backgroundColor: ''
+          }
+        },
+        components: [{}, {}]
+      }
+      后端
+      {
+        id: '',
+        title: '',
+        content: {
+          components: [],
+          props: {
+            backgroundColor: ''
+          }
+        }
+      }
+    */
+    fetchWork(state, { data }: RespWorkData) {
+      const { content, ...rest } = data
+      state.page = { ...state.page, ...rest }
+      if (content.props) {
+        state.page.props = content.props
+      }
+      state.components = content.components
     }
   }
 }
