@@ -52,7 +52,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, Ref, computed } from 'vue'
+import { defineComponent, reactive, ref, Ref, computed, watch } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -72,6 +72,7 @@ export default defineComponent({
   setup() {
     const store = useStore<GlobalDataProps>()
     const isLoginLoading = computed(() => store.getters.isOpLoading('login'))
+    const error = computed(() => store.state.global.error)
     const router = useRouter()
     const counter = ref(60)
     let timer = 0
@@ -139,6 +140,16 @@ export default defineComponent({
           startCounter()
         })
     }
+
+    watch(
+      () => error.value.status,
+      (errorValue) => {
+        if (errorValue) {
+          message.error(error.value.message || '未知错误'), 2
+        }
+      }
+    )
+
     return {
       form,
       rules,

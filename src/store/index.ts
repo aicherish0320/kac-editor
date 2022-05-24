@@ -2,7 +2,7 @@ import { ActionContext, createStore } from 'vuex'
 import user, { UserProps } from './user'
 import templates, { TemplatesProps } from './templates'
 import editor, { EditorProps } from './editor'
-import global from './global'
+import global, { GlobalStatus } from './global'
 import axios, { AxiosRequestConfig } from 'axios'
 import { forEach } from 'lodash-es'
 import { compile } from 'path-to-regexp'
@@ -11,6 +11,7 @@ export interface GlobalDataProps {
   user: UserProps
   templates: TemplatesProps
   editor: EditorProps
+  global: GlobalStatus
 }
 
 export interface ActionPayload {
