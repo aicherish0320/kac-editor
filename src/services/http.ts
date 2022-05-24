@@ -5,7 +5,8 @@ export type ICustomAxiosConfig = AxiosRequestConfig & {
   opName?: string
 }
 
-const baseBackendURL = 'http://182.92.168.192:8081'
+// const baseBackendURL = 'http://182.92.168.192:8081'
+const baseBackendURL = 'http://localhost:3000'
 axios.defaults.baseURL = `${baseBackendURL}/api/`
 
 axios.interceptors.request.use((config) => {
