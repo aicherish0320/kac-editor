@@ -117,7 +117,7 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import KaImage from '@/components/KaImage.vue'
@@ -134,8 +134,8 @@ import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
 import initContextMenu from '@/plugins/contextMenu'
 import UserProfile from '@/components/UserProfile.vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { Modal } from 'ant-design-vue'
+import useSaveWork from '@/hooks/useSaveWork'
+import { useRoute } from 'vue-router'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -156,17 +156,15 @@ export default defineComponent({
     initHotKeys()
     initContextMenu()
     const route = useRoute()
+    const currentWorkId = route.params.id
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
-    const isDirty = computed(() => store.state.editor.isDirty)
-    const saveIsLoading = computed(() => store.getters.isOpLoading('saveWork'))
     const userInfo = computed(() => store.state.user)
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
     const activePanel = ref<TabType>('component')
-    const currentWorkId = route.params.id
 
     const addItem = (component: any) => {
       store.commit('addComponent', component)
@@ -195,41 +193,7 @@ export default defineComponent({
       store.commit('updateComponent', { key: keysArr, value: valuesArr, id })
     }
 
-    let timer = 0
-    onMounted(() => {
-      if (currentWorkId) {
-        store.dispatch('fetchWork', { urlParams: { id: currentWorkId } })
-      }
-      timer = setInterval(() => {
-        if (isDirty.value) {
-          saveWork()
-        }
-      }, 3000)
-    })
-
-    onUnmounted(() => {
-      clearInterval(timer)
-    })
-
-    onBeforeRouteLeave((_to, _from, next) => {
-      if (isDirty.value) {
-        Modal.confirm({
-          title: '作品还未保存，是否保存？',
-          okText: '保存',
-          okType: 'primary',
-          cancelText: '不保存',
-          onOk: async () => {
-            await saveWork()
-            next()
-          },
-          onCancel: () => {
-            next()
-          }
-        })
-      } else {
-        next()
-      }
-    })
+    const { saveWork, saveIsLoading } = useSaveWork()
 
     const titleChange = (newTitle: string) => {
       store.commit('updatePage', {
@@ -241,23 +205,16 @@ export default defineComponent({
     const preview = () => {
       console.log('preview')
     }
-    const saveWork = () => {
-      const { title, props } = page.value
-      const payload = {
-        title,
-        content: {
-          components: components.value,
-          props
-        }
-      }
-      store.dispatch('saveWork', {
-        data: payload,
-        urlParams: { id: currentWorkId }
-      })
-    }
+
     const publish = () => {
       console.log('publish')
     }
+
+    onMounted(() => {
+      if (currentWorkId) {
+        store.dispatch('fetchWork', { urlParams: { id: currentWorkId } })
+      }
+    })
 
     return {
       components,
