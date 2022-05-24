@@ -17,6 +17,23 @@ const global: Module<GlobalStatus, GlobalDataProps> = {
       status: false
     }
   },
+  mutations: {
+    startLoading(state, { opName }) {
+      state.requestNumber++
+      if (opName) {
+        state.opNames[opName] = true
+      }
+    },
+    finishLoading(state, { opName }) {
+      setTimeout(() => {
+        state.requestNumber--
+        delete state.opNames[opName]
+      }, 1000)
+    },
+    setError(state, e) {
+      state.error = e
+    }
+  },
   getters: {
     isLoading: (state) => {
       return state.requestNumber > 0

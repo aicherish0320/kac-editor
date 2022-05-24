@@ -93,12 +93,6 @@ export default defineComponent({
         }
       }, 1000)
     }
-    // watch(counter, (newValue) => {
-    //   if (newValue === 0) {
-    //     clearInterval(timer)
-    //     counter.value = 60
-    //   }
-    // })
     const cellNumberValidator = (_: Rule, value: string) => {
       return new Promise((resolve, reject) => {
         const passed = /^1[3-9]\d{9}$/.test(value.trim())
