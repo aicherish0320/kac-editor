@@ -357,3 +357,30 @@ JavaScript 语言本身是不需要编译的
 视网膜(Retina)显示屏，它会使用更多的屏幕像素绘制相同的对象，从而获得更清晰的图像，devicePixelRatio 为 2
 
 所以虽然我们中间的元素 CSS 尺寸是 375px，但是因为 Apple 是视网膜显示屏，所以使用了两倍于 css 尺寸的设备像素来渲染它，这就是最后图片尺寸为 750px 原因。
+
+## HTML2Canvas 截图原理
+
+**目的**
+一个 canvas 元素，上面有绘制有一系列的 HTML 节点
+**局限**
+canvas 中没法添加具体的 HTML 节点，它只是一张画布
+
+通过 canvas.getContext('2d')可以拿到 canvas 提供的 2d 渲染上下文，然后在里面绘制形状、文本、图像和其他对象
+
+- 矩形 fillRect()
+- 文本 fillText()
+- 图像 drawImage()
+
+**SVG 来拯救我们**
+可缩放矢量图形，是一种用于描述二维的矢量图形，基于 XML 的标记语言
+
+svg 中有一个神奇的元素称之为 foreignObject
+foreignObject 元素允许包含来自不同的 XML 命名空间的元素。在浏览器的上下文中，很可能是 XHTML/HTML
+
+### 解题思路
+
+- 创建一个 canvas 元素
+- 创建 svg 文件，使用 Blob 构造函数
+- 将 svg 中的值填充 foreignObject，然后填充想要复制节点的 HTML
+- 创建 image 标签，将 image.src = URL.createObjectURL(svg)
+- 在 image 完成读取以后，调用 canvas 的 drawImage 方法，将图片绘制到画布上
