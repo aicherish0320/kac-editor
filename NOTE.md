@@ -319,3 +319,21 @@ JavaScript 语言本身是不需要编译的
 ## 前后端联调
 
 ## Mock server - JSON Server
+
+## 发布功能点
+
+- html2canvas
+  - 基本使用
+  - 踩坑之旅
+- qrcode - 生产二维码
+- Clipboard.js - 复制文本到剪切板
+  - 基本使用
+  - 原理
+- useLoadMore - 钩子函数的进化之旅
+  - 支持点击加载更多
+  - 支持无限滚动
+  - 支持分页
+- 前端文件下载的原理
+  - 同域文件的下载
+  - 跨域文件的下载-
+  - FileSaver.js 的使用和原理
