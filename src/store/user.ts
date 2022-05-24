@@ -26,7 +26,7 @@ export interface UserProps {
 const user: Module<UserProps, GlobalDataProps> = {
   state: {
     isLogin: false,
-    token: '',
+    token: localStorage.getItem('kac_token') || '',
     data: {}
   },
   mutations: {

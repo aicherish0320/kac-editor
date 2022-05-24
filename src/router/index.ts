@@ -1,4 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import store from '@/store'
+import axios from 'axios'
+import { message } from 'ant-design-vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "login" */ '../views/Login.vue'),
     meta: {
       redirectAlreadyLogin: true,
-      title: '登录到爱鹊絮',
+      title: '登录到艾鹊絮',
       disableLoading: true
     }
   }
@@ -42,6 +45,39 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach(async (to, from) => {
+  const { user } = store.state
+  const { token, isLogin } = user
+  const { redirectAlreadyLogin, requiredLogin, title } = to.meta
+
+  if (title) {
+    document.title = title as string
+  }
+  if (!isLogin) {
+    if (token) {
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      try {
+        await store.dispatch('fetchCurrentUser')
+        if (redirectAlreadyLogin) {
+          return '/'
+        }
+      } catch {
+        message.error('登陆状态已过期 请重新登陆', 2)
+        store.commit('logout')
+        return '/login'
+      }
+    } else {
+      if (requiredLogin) {
+        return '/login'
+      }
+    }
+  } else {
+    if (redirectAlreadyLogin) {
+      return '/'
+    }
+  }
 })
 
 export default router
