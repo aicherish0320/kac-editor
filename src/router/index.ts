@@ -39,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
       title: '登录到艾鹊絮',
       disableLoading: true
     }
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('../views/Test.vue')
   }
 ]
 
