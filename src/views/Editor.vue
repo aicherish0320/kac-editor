@@ -117,7 +117,7 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import KaImage from '@/components/KaImage.vue'
@@ -134,7 +134,8 @@ import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
 import initContextMenu from '@/plugins/contextMenu'
 import UserProfile from '@/components/UserProfile.vue'
-import { useRoute } from 'vue-router'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { Modal } from 'ant-design-vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -158,6 +159,7 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
+    const isDirty = computed(() => store.state.editor.isDirty)
     const saveIsLoading = computed(() => store.getters.isOpLoading('saveWork'))
     const userInfo = computed(() => store.state.user)
     const currentElement = computed<ComponentData | null>(
@@ -193,9 +195,39 @@ export default defineComponent({
       store.commit('updateComponent', { key: keysArr, value: valuesArr, id })
     }
 
+    let timer = 0
     onMounted(() => {
       if (currentWorkId) {
         store.dispatch('fetchWork', { urlParams: { id: currentWorkId } })
+      }
+      timer = setInterval(() => {
+        if (isDirty.value) {
+          saveWork()
+        }
+      }, 3000)
+    })
+
+    onUnmounted(() => {
+      clearInterval(timer)
+    })
+
+    onBeforeRouteLeave((_to, _from, next) => {
+      if (isDirty.value) {
+        Modal.confirm({
+          title: '作品还未保存，是否保存？',
+          okText: '保存',
+          okType: 'primary',
+          cancelText: '不保存',
+          onOk: async () => {
+            await saveWork()
+            next()
+          },
+          onCancel: () => {
+            next()
+          }
+        })
+      } else {
+        next()
       }
     })
 
