@@ -1,6 +1,20 @@
 <template>
   <div class="homepage-container">
-    <a-layout-header class="header">
+    <a-layout :style="{ background: '#fff' }">
+      <a-layout-header class="header">
+        <div class="page-title">
+          <router-link to="/">慕课乐高</router-link>
+        </div>
+        <user-profile :user="user"></user-profile>
+      </a-layout-header>
+      <a-layout-content class="home-layout">
+        <router-view></router-view>
+      </a-layout-content>
+    </a-layout>
+    <a-layout-footer>
+      © 艾鹊絮（imooc.com）版权所有 | 津ICP备20000929号-2
+    </a-layout-footer>
+    <!-- <a-layout-header class="header">
       <div class="page-title">
         <router-link to="/">KacEditor</router-link>
       </div>
@@ -11,7 +25,7 @@
     </a-layout-content>
     <a-layout-footer>
       © kacherish（kac.com）版权所有 | 津ICP备20000929号-2
-    </a-layout-footer>
+    </a-layout-footer> -->
   </div>
 </template>
 

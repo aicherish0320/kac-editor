@@ -13,6 +13,25 @@
           </router-link>
           <InlineEdit :value="page.title" @change="titleChange" />
         </div>
+        <a-menu
+          class="header-menu"
+          :selectable="false"
+          theme="dark"
+          mode="horizontal"
+        >
+          <a-menu-item key="1">
+            <a-button type="primary" @click="preview">预览和设置</a-button>
+          </a-menu-item>
+          <a-menu-item key="2">
+            <a-button type="primary" @click="saveWork">保存</a-button>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <a-button type="primary" @click="publish">发布</a-button>
+          </a-menu-item>
+          <a-menu-item key="4">
+            <UserProfile :user="userInfo"></UserProfile>
+          </a-menu-item>
+        </a-menu>
       </a-layout-header>
     </a-layout>
     <!-- 下部分 -->
@@ -112,6 +131,7 @@ import initHotKeys from '@/plugins/hotKeys'
 import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
 import initContextMenu from '@/plugins/contextMenu'
+import UserProfile from '@/components/UserProfile.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -125,7 +145,8 @@ export default defineComponent({
     EditGroup,
     LayerList,
     InlineEdit,
-    HistoryArea
+    HistoryArea,
+    UserProfile
   },
   setup() {
     initHotKeys()
@@ -133,6 +154,7 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
+    const userInfo = computed(() => store.state.user)
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
@@ -165,6 +187,23 @@ export default defineComponent({
       store.commit('updateComponent', { key: keysArr, value: valuesArr, id })
     }
 
+    const titleChange = (newTitle: string) => {
+      store.commit('updatePage', {
+        key: 'title',
+        value: newTitle,
+        isRoot: true
+      })
+    }
+    const preview = () => {
+      console.log('preview')
+    }
+    const saveWork = () => {
+      console.log('saveWork')
+    }
+    const publish = () => {
+      console.log('publish')
+    }
+
     return {
       components,
       defaultTextTemplates,
@@ -175,7 +214,12 @@ export default defineComponent({
       activePanel,
       handleChange,
       page,
-      updatePosition
+      updatePosition,
+      titleChange,
+      preview,
+      saveWork,
+      publish,
+      userInfo
     }
   }
 })
@@ -204,9 +248,6 @@ export default defineComponent({
   margin-top: 50px;
   max-height: 80vh;
 }
-.page-title {
-  display: flex;
-}
 .page-title .inline-edit span {
   font-weight: 500;
   margin-left: 10px;
@@ -218,5 +259,20 @@ export default defineComponent({
 .preview-list.canvas-fix {
   position: absolute;
   max-height: none;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.page-title {
+  color: #fff;
+  display: flex;
+}
+.header-menu {
+  line-height: '64px';
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
 }
 </style>
