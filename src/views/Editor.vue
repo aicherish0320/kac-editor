@@ -52,7 +52,11 @@
         <a-layout-content class="preview-container">
           <p>画布区域</p>
           <HistoryArea></HistoryArea>
-          <div class="preview-list" id="canvas-area">
+          <div
+            class="preview-list"
+            id="canvas-area"
+            :class="{ 'canvas-fix': canvasFix }"
+          >
             <div class="body-container" :style="page.props">
               <EditWrapper
                 v-for="component in components"
@@ -118,7 +122,7 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import KaImage from '@/components/KaImage.vue'
@@ -207,13 +211,21 @@ export default defineComponent({
     const preview = () => {
       console.log('preview')
     }
+    const canvasFix = ref(false)
 
-    const publish = () => {
+    const publish = async () => {
+      // remove select element
+      store.commit('setActive', '')
+      canvasFix.value = true
+      await nextTick()
       const el = document.querySelector('#canvas-area') as HTMLElement
-      html2canvas(el, { width: 375, useCORS: true }).then((canvas) => {
-        const image = document.querySelector('#test-img') as HTMLImageElement
-        image.src = canvas.toDataURL()
-      })
+      html2canvas(el, { width: 375, useCORS: true, scale: 1 }).then(
+        (canvas) => {
+          const image = document.querySelector('#test-img') as HTMLImageElement
+          image.src = canvas.toDataURL()
+          canvasFix.value = false
+        }
+      )
     }
 
     onMounted(() => {
@@ -238,7 +250,8 @@ export default defineComponent({
       saveWork,
       publish,
       userInfo,
-      saveIsLoading
+      saveIsLoading,
+      canvasFix
     }
   }
 })
