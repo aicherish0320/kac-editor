@@ -23,7 +23,9 @@
             <a-button type="primary" @click="preview">预览和设置</a-button>
           </a-menu-item>
           <a-menu-item key="2">
-            <a-button type="primary" @click="saveWork">保存</a-button>
+            <a-button type="primary" @click="saveWork" :loading="saveIsLoading"
+              >保存</a-button
+            >
           </a-menu-item>
           <a-menu-item key="3">
             <a-button type="primary" @click="publish">发布</a-button>
@@ -115,7 +117,7 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, ref } from 'vue'
+import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import KaText from '@/components/KaText.vue'
 import KaImage from '@/components/KaImage.vue'
@@ -132,6 +134,7 @@ import { pickBy } from 'lodash'
 import HistoryArea from '@/components/HistoryArea.vue'
 import initContextMenu from '@/plugins/contextMenu'
 import UserProfile from '@/components/UserProfile.vue'
+import { useRoute } from 'vue-router'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -151,14 +154,17 @@ export default defineComponent({
   setup() {
     initHotKeys()
     initContextMenu()
+    const route = useRoute()
     const store = useStore<GlobalDataProps>()
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
+    const saveIsLoading = computed(() => store.getters.isOpLoading('saveWork'))
     const userInfo = computed(() => store.state.user)
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
     const activePanel = ref<TabType>('component')
+    const currentWorkId = route.params.id
 
     const addItem = (component: any) => {
       store.commit('addComponent', component)
@@ -187,6 +193,12 @@ export default defineComponent({
       store.commit('updateComponent', { key: keysArr, value: valuesArr, id })
     }
 
+    onMounted(() => {
+      if (currentWorkId) {
+        store.dispatch('fetchWork', { urlParams: { id: currentWorkId } })
+      }
+    })
+
     const titleChange = (newTitle: string) => {
       store.commit('updatePage', {
         key: 'title',
@@ -198,7 +210,18 @@ export default defineComponent({
       console.log('preview')
     }
     const saveWork = () => {
-      console.log('saveWork')
+      const { title, props } = page.value
+      const payload = {
+        title,
+        content: {
+          components: components.value,
+          props
+        }
+      }
+      store.dispatch('saveWork', {
+        data: payload,
+        urlParams: { id: currentWorkId }
+      })
     }
     const publish = () => {
       console.log('publish')
@@ -219,7 +242,8 @@ export default defineComponent({
       preview,
       saveWork,
       publish,
-      userInfo
+      userInfo,
+      saveIsLoading
     }
   }
 })

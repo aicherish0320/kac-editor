@@ -10,7 +10,7 @@ import {
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 import { Module } from 'vuex'
-import store, { GlobalDataProps } from '.'
+import store, { actionWrapper, GlobalDataProps } from '.'
 import { RespWorkData } from './respTypes'
 
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
@@ -183,9 +183,8 @@ export const testComponents: ComponentData[] = [
 
 const pageDefaultProps = {
   backgroundColor: '#ffffff',
-  // backgroundImage: '',
-  backgroundImage:
-    'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
+  // backgroundImage: 'url("https://aic-lego.oss-cn-hangzhou.aliyuncs.com/upload-files/kj-769931.jpeg")',
+  backgroundImage: '',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   height: '560px'
@@ -526,6 +525,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       }
     */
     fetchWork(state, { data }: RespWorkData) {
+      console.log('data >>> ', data)
       const { content, ...rest } = data
       state.page = { ...state.page, ...rest }
       if (content.props) {
@@ -533,6 +533,10 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       }
       state.components = content.components
     }
+  },
+  actions: {
+    fetchWork: actionWrapper('/works/:id', 'fetchWork'),
+    saveWork: actionWrapper('/works/:id', 'saveWork', { method: 'patch' })
   }
 }
 

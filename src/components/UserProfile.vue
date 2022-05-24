@@ -23,6 +23,7 @@
 <script lang="ts">
 import { UserProps } from '@/store/user'
 import { message } from 'ant-design-vue'
+import axios from 'axios'
 import { defineComponent, PropType } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
@@ -39,9 +40,23 @@ export default defineComponent({
     const store = useStore()
     const router = useRouter()
 
-    const createDesign = () => {
-      console.log('createDesign >>> ')
+    const createDesign = async () => {
+      const payload = {
+        title: '未命名作品',
+        desc: '未命名作品',
+        coverImg:
+          'http://typescript-vue.oss-cn-beijing.aliyuncs.com/vue-marker/5f81cca3f3bf7a0e1ebaf885.png'
+      }
+      const postData = {
+        method: 'post',
+        data: payload,
+        opName: 'createDesign'
+      } as any
+      const { data } = await axios('/works', postData)
+      message.success('创建作品成功', 2)
+      router.push(`/editor/${data.data.id}`)
     }
+
     const login = () => {
       store.commit('login')
       message.success('登录成功', 2)
