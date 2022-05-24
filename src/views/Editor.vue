@@ -45,6 +45,7 @@
           :list="defaultTextTemplates"
           @onItemClick="addItem"
         ></ComponentList>
+        <img src="" alt="testImg" id="test-img" :style="{ width: '300px' }" />
       </a-layout-sider>
       <!-- 画布编辑区域 -->
       <a-layout style="padding: 0 24px 24px">
@@ -136,6 +137,7 @@ import initContextMenu from '@/plugins/contextMenu'
 import UserProfile from '@/components/UserProfile.vue'
 import useSaveWork from '@/hooks/useSaveWork'
 import { useRoute } from 'vue-router'
+import html2canvas from 'html2canvas'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -207,7 +209,11 @@ export default defineComponent({
     }
 
     const publish = () => {
-      console.log('publish')
+      const el = document.querySelector('#canvas-area') as HTMLElement
+      html2canvas(el, { width: 375, useCORS: true }).then((canvas) => {
+        const image = document.querySelector('#test-img') as HTMLImageElement
+        image.src = canvas.toDataURL()
+      })
     }
 
     onMounted(() => {

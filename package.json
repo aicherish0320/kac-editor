@@ -13,6 +13,7 @@
     "axios": "^0.26.1",
     "cropperjs": "^1.5.12",
     "hotkeys-js": "^3.9.3",
+    "html2canvas": "^1.4.1",
     "kac-components": "^1.0.3",
     "lodash-es": "^4.17.21",
     "path-to-regexp": "^6.2.1",
