@@ -142,6 +142,7 @@ import UserProfile from '@/components/UserProfile.vue'
 import useSaveWork from '@/hooks/useSaveWork'
 import { useRoute } from 'vue-router'
 import html2canvas from 'html2canvas'
+import { takeScreenshotAdnUpload } from '@/helper'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -219,13 +220,15 @@ export default defineComponent({
       canvasFix.value = true
       await nextTick()
       const el = document.querySelector('#canvas-area') as HTMLElement
-      html2canvas(el, { width: 375, useCORS: true, scale: 1 }).then(
-        (canvas) => {
-          const image = document.querySelector('#test-img') as HTMLImageElement
-          image.src = canvas.toDataURL()
-          canvasFix.value = false
-        }
-      )
+      await takeScreenshotAdnUpload(el)
+      canvasFix.value = false
+      // html2canvas(el, { width: 375, useCORS: true, scale: 1 }).then(
+      //   (canvas) => {
+      //     const image = document.querySelector('#test-img') as HTMLImageElement
+      //     image.src = canvas.toDataURL()
+      //     canvasFix.value = false
+      //   }
+      // )
     }
 
     onMounted(() => {

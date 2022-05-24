@@ -1,4 +1,7 @@
 import { message } from 'ant-design-vue'
+import axios from 'axios'
+import html2canvas from 'html2canvas'
+import { RespUploadData } from './store/respTypes'
 
 interface CheckCondition {
   format?: string[]
@@ -67,4 +70,40 @@ export const getParentElement = (element: HTMLElement, className: string) => {
     }
   }
   return null
+}
+
+async function uploadFile<R = any>(
+  file: Blob,
+  url = '/utils/upload-img',
+  fileName = 'screenshot.png'
+) {
+  const newFile = file instanceof File ? file : new File([file], fileName)
+  const formData = new FormData()
+  formData.append(newFile.name, newFile)
+  const { data } = await axios.post<R>(url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  return data
+}
+
+function getCanvasBlob(canvas: HTMLCanvasElement) {
+  return new Promise<Blob | null>((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob)
+    })
+  })
+}
+
+export async function takeScreenshotAdnUpload(ele: HTMLElement) {
+  // get screenshot canvas
+  const canvas = await html2canvas(ele, { width: 375, useCORS: true, scale: 1 })
+  // transform canvas to blob
+  const canvasBlob = await getCanvasBlob(canvas)
+  // upload blob to server
+  if (canvasBlob) {
+    const data = await uploadFile<RespUploadData>(canvasBlob)
+    return data
+  }
 }
