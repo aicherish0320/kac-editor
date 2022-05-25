@@ -43,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/test',
     name: 'test',
-    component: () => import('../views/Test.vue')
+    component: () => import('../views/TestClipboard.vue')
   }
 ]
 
