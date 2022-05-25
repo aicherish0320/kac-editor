@@ -28,7 +28,9 @@
             >
           </a-menu-item>
           <a-menu-item key="3">
-            <a-button type="primary" @click="publish">发布</a-button>
+            <a-button type="primary" @click="publish" :loading="isPublishing"
+              >发布</a-button
+            >
           </a-menu-item>
           <a-menu-item key="4">
             <UserProfile :user="userInfo"></UserProfile>
@@ -213,22 +215,38 @@ export default defineComponent({
       console.log('preview')
     }
     const canvasFix = ref(false)
-
+    const isPublishing = ref(false)
     const publish = async () => {
+      isPublishing.value = true
       // remove select element
       store.commit('setActive', '')
       canvasFix.value = true
       await nextTick()
+      // 1 take screenshot and upload
       const el = document.querySelector('#canvas-area') as HTMLElement
-      await takeScreenshotAdnUpload(el)
-      canvasFix.value = false
-      // html2canvas(el, { width: 375, useCORS: true, scale: 1 }).then(
-      //   (canvas) => {
-      //     const image = document.querySelector('#test-img') as HTMLImageElement
-      //     image.src = canvas.toDataURL()
-      //     canvasFix.value = false
-      //   }
-      // )
+
+      try {
+        const resp = await takeScreenshotAdnUpload(el)
+        if (resp) {
+          // 2 update page coverImg in store
+          store.commit('updatePage', {
+            key: 'coverImg',
+            value: resp.data.urls[0],
+            isRoot: true
+          })
+          // 3 save work
+          await saveWork()
+          // 4 publish work
+          await store.dispatch('publishWork', {
+            urlParams: { id: currentWorkId }
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      } finally {
+        canvasFix.value = false
+        isPublishing.value = false
+      }
     }
 
     onMounted(() => {
@@ -254,7 +272,8 @@ export default defineComponent({
       publish,
       userInfo,
       saveIsLoading,
-      canvasFix
+      canvasFix,
+      isPublishing
     }
   }
 })

@@ -549,7 +549,10 @@ const editor: Module<EditorProps, GlobalDataProps> = {
   },
   actions: {
     fetchWork: actionWrapper('/works/:id', 'fetchWork'),
-    saveWork: actionWrapper('/works/:id', 'saveWork', { method: 'patch' })
+    saveWork: actionWrapper('/works/:id', 'saveWork', { method: 'patch' }),
+    publishWork: actionWrapper('/works/publish/:id', 'publishWork', {
+      method: 'post'
+    })
   }
 }
 
