@@ -389,3 +389,12 @@ foreignObject 元素允许包含来自不同的 XML 命名空间的元素。在�
 
 - qrcodejs ❌
 - node-qrcode ✅
+
+## 复制到剪贴板的原理
+
+看起来很简单的问题，但是由于不同浏览器之间存在不同的 API 实现和各种 hack，所以它的实现很混乱
+
+- 方法一：最现代的 Clipboard API
+  - 还在 working draft 阶段，浏览器兼容性有待加强
+- 方法二：document.execCommand() 方法
+  - 它不仅仅是解决复制的场景，而且是给可编辑区域提供一系列功能
