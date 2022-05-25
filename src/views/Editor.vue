@@ -142,9 +142,8 @@ import HistoryArea from '@/components/HistoryArea.vue'
 import initContextMenu from '@/plugins/contextMenu'
 import UserProfile from '@/components/UserProfile.vue'
 import useSaveWork from '@/hooks/useSaveWork'
+import usePublishWork from '@/hooks/usePublishWork'
 import { useRoute } from 'vue-router'
-import html2canvas from 'html2canvas'
-import { takeScreenshotAdnUpload } from '@/helper'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -170,7 +169,7 @@ export default defineComponent({
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
     const userInfo = computed(() => store.state.user)
-    const channels = computed(() => store.state.editor.channels)
+
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
@@ -204,6 +203,23 @@ export default defineComponent({
     }
 
     const { saveWork, saveIsLoading } = useSaveWork()
+    const { publishWork, isPublishing } = usePublishWork()
+
+    const publish = async () => {
+      // remove select element
+      store.commit('setActive', '')
+      const el = document.getElementById('canvas-area') as HTMLElement
+      canvasFix.value = true
+      await nextTick()
+      try {
+        await publishWork(el)
+        // showPublishForm.value = true
+      } catch (e) {
+        console.error(e)
+      } finally {
+        canvasFix.value = false
+      }
+    }
 
     const titleChange = (newTitle: string) => {
       store.commit('updatePage', {
@@ -216,49 +232,6 @@ export default defineComponent({
       console.log('preview')
     }
     const canvasFix = ref(false)
-    const isPublishing = ref(false)
-    const publish = async () => {
-      isPublishing.value = true
-      // remove select element
-      store.commit('setActive', '')
-      canvasFix.value = true
-      await nextTick()
-      // 1 take screenshot and upload
-      const el = document.querySelector('#canvas-area') as HTMLElement
-
-      try {
-        const resp = await takeScreenshotAdnUpload(el)
-        if (resp) {
-          // 2 update page coverImg in store
-          store.commit('updatePage', {
-            key: 'coverImg',
-            value: resp.data.urls[0],
-            isRoot: true
-          })
-          // 3 save work
-          await saveWork()
-          // 4 publish work
-          await store.dispatch('publishWork', {
-            urlParams: { id: currentWorkId }
-          })
-          // 5 get channels list
-          await store.dispatch('fetchChannels', {
-            urlParams: { id: currentWorkId }
-          })
-          // 6 if channels list length is 0, create a new channel
-          if (channels.value.length === 0) {
-            await store.dispatch('createChannel', {
-              data: { name: '默认', workId: parseInt(currentWorkId as string) }
-            })
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      } finally {
-        canvasFix.value = false
-        isPublishing.value = false
-      }
-    }
 
     onMounted(() => {
       if (currentWorkId) {

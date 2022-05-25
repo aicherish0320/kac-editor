@@ -96,7 +96,7 @@ function getCanvasBlob(canvas: HTMLCanvasElement) {
   })
 }
 
-export async function takeScreenshotAdnUpload(ele: HTMLElement) {
+export async function takeScreenshotAndUpload(ele: HTMLElement) {
   // get screenshot canvas
   const canvas = await html2canvas(ele, { width: 375, useCORS: true, scale: 1 })
   // transform canvas to blob
