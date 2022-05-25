@@ -11,6 +11,7 @@
   "dependencies": {
     "ant-design-vue": "^2.2.8",
     "axios": "^0.26.1",
+    "clipboard": "^2.0.11",
     "cropperjs": "^1.5.12",
     "hotkeys-js": "^3.9.3",
     "html2canvas": "^1.4.1",

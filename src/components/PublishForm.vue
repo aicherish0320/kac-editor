@@ -91,10 +91,11 @@ import { GlobalDataProps } from '@/store'
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { Form } from 'ant-design-vue'
+import { Form, message } from 'ant-design-vue'
 import { baseH5URL } from '@/services/http'
 import { generateQRCode } from '@/helper'
 import { last } from 'lodash'
+import Clipboard from 'clipboard'
 
 export default defineComponent({
   name: 'PublishForm',
@@ -138,6 +139,11 @@ export default defineComponent({
     }
 
     onMounted(() => {
+      const clipboard = new Clipboard('.copy-button')
+      clipboard.on('success', (e) => {
+        message.success('复制成功', 1)
+        e.clearSelection()
+      })
       channels.value.forEach(async (channel) => {
         await generateQRCode(
           `channel-barcode-${channel.id}`,
