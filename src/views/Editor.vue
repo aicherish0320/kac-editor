@@ -1,5 +1,13 @@
 <template>
   <div class="editor-container">
+    <a-modal
+      title="发布成功"
+      v-model:visible="showPublishForm"
+      width="700px"
+      :footer="null"
+    >
+      <PublishForm />
+    </a-modal>
     <!-- 上部分 -->
     <a-layout>
       <a-layout-header class="header">
@@ -144,6 +152,7 @@ import UserProfile from '@/components/UserProfile.vue'
 import useSaveWork from '@/hooks/useSaveWork'
 import usePublishWork from '@/hooks/usePublishWork'
 import { useRoute } from 'vue-router'
+import PublishForm from '@/components/PublishForm.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -158,7 +167,8 @@ export default defineComponent({
     LayerList,
     InlineEdit,
     HistoryArea,
-    UserProfile
+    UserProfile,
+    PublishForm
   },
   setup() {
     initHotKeys()
@@ -169,6 +179,7 @@ export default defineComponent({
     const components = computed(() => store.state.editor.components)
     const page = computed(() => store.state.editor.page)
     const userInfo = computed(() => store.state.user)
+    const showPublishForm = ref(false)
 
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
@@ -213,7 +224,7 @@ export default defineComponent({
       await nextTick()
       try {
         await publishWork(el)
-        // showPublishForm.value = true
+        showPublishForm.value = true
       } catch (e) {
         console.error(e)
       } finally {
@@ -257,7 +268,8 @@ export default defineComponent({
       userInfo,
       saveIsLoading,
       canvasFix,
-      isPublishing
+      isPublishing,
+      showPublishForm
     }
   }
 })

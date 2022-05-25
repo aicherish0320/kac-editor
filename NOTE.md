@@ -384,3 +384,8 @@ foreignObject 元素允许包含来自不同的 XML 命名空间的元素。在�
 - 将 svg 中的值填充 foreignObject，然后填充想要复制节点的 HTML
 - 创建 image 标签，将 image.src = URL.createObjectURL(svg)
 - 在 image 完成读取以后，调用 canvas 的 drawImage 方法，将图片绘制到画布上
+
+## 二维码
+
+- qrcodejs ❌
+- node-qrcode ✅
