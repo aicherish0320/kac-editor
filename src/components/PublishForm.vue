@@ -88,12 +88,13 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Form } from 'ant-design-vue'
 import { baseH5URL } from '@/services/http'
-import QRCode from 'qrcode'
+import { generateQRCode } from '@/helper'
+import { last } from 'lodash'
 
 export default defineComponent({
   name: 'PublishForm',
@@ -137,17 +138,33 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      channels.value.forEach((channel) => {
-        const ele = document.getElementById(
-          `channel-barcode-${channel.id}`
-        ) as HTMLCanvasElement
-        QRCode.toCanvas(ele, generateChannelURL(channel.id), {
-          width: 100
-        }).then(() => {
-          console.log('success')
-        })
+      channels.value.forEach(async (channel) => {
+        await generateQRCode(
+          `channel-barcode-${channel.id}`,
+          generateChannelURL(channel.id)
+        )
       })
     })
+    //  () => channels 观察一份拷贝，不然传递的是引用类型
+    // 使用 deep ，使其在 mutations 的时候都可以被监听
+    watch(
+      channels,
+      async (newChannels, oldChannels) => {
+        if (newChannels.length > oldChannels.length) {
+          const createChannel = last(newChannels)
+
+          if (createChannel) {
+            await generateQRCode(
+              `channel-barcode-${createChannel.id}`,
+              generateChannelURL(createChannel.id)
+            )
+          }
+        }
+      },
+      {
+        flush: 'post' // DOM 节点生成之后
+      }
+    )
 
     return {
       currentWorkId,
