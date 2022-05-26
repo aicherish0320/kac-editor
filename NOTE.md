@@ -398,3 +398,13 @@ foreignObject 元素允许包含来自不同的 XML 命名空间的元素。在�
   - 还在 working draft 阶段，浏览器兼容性有待加强
 - 方法二：document.execCommand() 方法
   - 它不仅仅是解决复制的场景，而且是给可编辑区域提供一系列功能
+
+### 实现
+
+document.execCommand('copy') 解决思路分析
+
+- 手动创建可编辑元素，比如 textArea，然后将要拷贝的值设置为它的 value
+- 将它插入到页面中，调用 textArea 上的方法，对值进行选中
+- 然后再调用 document.execCommand('copy')
+- 特别注意 textArea 要不可见，使用特殊的样式让它不出现在任何区域
+- 最后要将 textArea 节点删除
