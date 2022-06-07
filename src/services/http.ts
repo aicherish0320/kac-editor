@@ -7,7 +7,7 @@ export type ICustomAxiosConfig = AxiosRequestConfig & {
 
 // const baseBackendURL = 'http://182.92.168.192:8081'
 const baseBackendURL = 'http://localhost:3000'
-export const baseH5URL = 'http://182.92.168.192:8082'
+export const baseH5URL = 'http://192.168.10.178:3001'
 axios.defaults.baseURL = `${baseBackendURL}/api/`
 
 axios.interceptors.request.use((config) => {
