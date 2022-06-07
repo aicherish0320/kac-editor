@@ -79,7 +79,53 @@
               </a-form-item>
             </a-form>
           </a-tab-pane>
-          <a-tab-pane key="template" tab="发布为模版"> </a-tab-pane>
+          <a-tab-pane key="template" tab="发布为模版">
+            <a-row
+              v-for="channel in channels"
+              :key="channel.id"
+              class="channel-item"
+            >
+              <a-col :span="6">
+                <canvas
+                  class="barcode-container"
+                  :id="`channel-barcode-${channel.id}`"
+                />
+              </a-col>
+              <a-col :span="18" class="left-gap">
+                <h4>{{ channel.name }}</h4>
+                <a-row>
+                  <a-col :span="18">
+                    <a-input
+                      :value="generateChannelURL(channel.id)"
+                      :readonly="true"
+                      :id="`channel-url-${channel.id}`"
+                    />
+                  </a-col>
+                  <a-col :span="6">
+                    <a-button
+                      class="copy-button"
+                      :data-clipboard-target="`#channel-url-${channel.id}`"
+                      >复制</a-button
+                    >
+                  </a-col>
+                </a-row>
+              </a-col>
+              <div class="delete-area">
+                <a-button
+                  type="danger"
+                  size="small"
+                  @click="deleteChannel(channel.id)"
+                  :disabled="deleteDisabled"
+                  >删除渠道</a-button
+                >
+              </div>
+            </a-row>
+            <div class="template-submit">
+              <AButton type="primary" shape="round" @click="publishTemplate"
+                >发布模版</AButton
+              >
+            </div>
+          </a-tab-pane>
         </a-tabs>
       </a-col>
     </a-row>
@@ -96,6 +142,7 @@ import { baseH5URL } from '@/services/http'
 import { generateQRCode } from '@/helper'
 import { last } from 'lodash'
 import Clipboard from 'clipboard'
+import axios from 'axios'
 
 export default defineComponent({
   name: 'PublishForm',
@@ -172,6 +219,12 @@ export default defineComponent({
       }
     )
 
+    const publishTemplate = async () => {
+      // api/works/publish-template/2618
+      const res = axios.post('/works/publish-template/' + currentWorkId)
+      console.log('res >>> ', res)
+    }
+
     return {
       currentWorkId,
       page,
@@ -181,7 +234,8 @@ export default defineComponent({
       deleteDisabled,
       generateChannelURL,
       createChannel,
-      deleteChannel
+      deleteChannel,
+      publishTemplate
     }
   }
 })

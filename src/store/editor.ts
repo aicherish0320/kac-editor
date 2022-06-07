@@ -560,6 +560,9 @@ const editor: Module<EditorProps, GlobalDataProps> = {
           (channel) => channel.id !== urlParams.id
         )
       }
+    },
+    publishWork() {
+      console.log('publishWork')
     }
   },
   actions: {

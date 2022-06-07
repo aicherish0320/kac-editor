@@ -55,7 +55,7 @@
           :list="defaultTextTemplates"
           @onItemClick="addItem"
         ></ComponentList>
-        <img src="" alt="testImg" id="test-img" :style="{ width: '300px' }" />
+        <!-- <img src="" alt="testImg" id="test-img" :style="{ width: '300px' }" /> -->
       </a-layout-sider>
       <!-- 画布编辑区域 -->
       <a-layout style="padding: 0 24px 24px">
