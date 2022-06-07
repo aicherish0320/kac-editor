@@ -8,6 +8,8 @@
     >
       <PublishForm />
     </a-modal>
+    <PreviewForm v-model:visible="showPreviewForm" v-if="showPreviewForm">
+    </PreviewForm>
     <!-- 上部分 -->
     <a-layout>
       <a-layout-header class="header">
@@ -153,6 +155,7 @@ import useSaveWork from '@/hooks/useSaveWork'
 import usePublishWork from '@/hooks/usePublishWork'
 import { useRoute } from 'vue-router'
 import PublishForm from '@/components/PublishForm.vue'
+import PreviewForm from '@/components/PreviewForm.vue'
 
 export type TabType = 'component' | 'layer' | 'page'
 export default defineComponent({
@@ -168,7 +171,8 @@ export default defineComponent({
     InlineEdit,
     HistoryArea,
     UserProfile,
-    PublishForm
+    PublishForm,
+    PreviewForm
   },
   setup() {
     initHotKeys()
@@ -180,7 +184,7 @@ export default defineComponent({
     const page = computed(() => store.state.editor.page)
     const userInfo = computed(() => store.state.user)
     const showPublishForm = ref(false)
-
+    const showPreviewForm = ref(false)
     const currentElement = computed<ComponentData | null>(
       () => store.getters.getCurrentElement
     )
@@ -239,8 +243,9 @@ export default defineComponent({
         isRoot: true
       })
     }
-    const preview = () => {
-      console.log('preview')
+    const preview = async () => {
+      await saveWork()
+      showPreviewForm.value = true
     }
     const canvasFix = ref(false)
 
@@ -269,7 +274,8 @@ export default defineComponent({
       saveIsLoading,
       canvasFix,
       isPublishing,
-      showPublishForm
+      showPublishForm,
+      showPreviewForm
     }
   }
 })
