@@ -118,6 +118,40 @@ export function generateQRCode(id: string, url: string, width = 100) {
 export function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
+
+export const downloadFile = (src: string, fileName = 'default.png') => {
+  // 创建链接
+  const link = document.createElement('a')
+  link.download = fileName
+  link.rel = 'noopener'
+  if (link.origin !== location.origin) {
+    //https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseType
+    axios
+      .get(src, { responseType: 'blob' })
+      .then((data) => {
+        link.href = URL.createObjectURL(data.data)
+        setTimeout(() => {
+          link.dispatchEvent(new MouseEvent('click'))
+        })
+        // https://developer.mozilla.org/zh-CN/docs/Web/API/URL/revokeObjectURL
+        setTimeout(() => {
+          URL.revokeObjectURL(link.href)
+        }, 10000)
+      })
+      .catch((e) => {
+        console.error(e)
+        link.target = '_blank'
+        link.href = src
+        link.dispatchEvent(new MouseEvent('click'))
+      })
+  } else {
+    // 设置链接属性
+    link.href = src
+    // 触发事件
+    link.dispatchEvent(new MouseEvent('click'))
+  }
+}
+
 export const downloadImage = (url: string) => {
   const fileName = url.substring(url.lastIndexOf('/') + 1)
   saveAs(url, fileName)
