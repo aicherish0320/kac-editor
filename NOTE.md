@@ -425,3 +425,8 @@ noopener 一个重要的属性，对于 web  安全来说非常关键
 - 触发 A 链接的点击事件
 
 **download属性仅适用于同源URL**
+
+### 使用 FileSaver.js 完成下载
+借助 HTTP 特殊的响应头触发浏览器自动下载
+
+**Content-Disposition**，最佳的下载方式，需要服务器的支持，并且不需要任何的 Javascript，需要在 HTTP 头部添加
