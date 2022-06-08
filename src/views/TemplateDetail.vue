@@ -25,6 +25,9 @@
           <a-button size="large" @click="download"> 下载图片海报 </a-button>
         </div>
       </a-col>
+      <a-col :span="8">
+        <img @click="onDownload" src="@/assets/logo2.png" alt="img" id="logo" />
+      </a-col>
     </a-row>
   </div>
 </template>
@@ -57,10 +60,19 @@ export default defineComponent({
       downloadImage(template.value.coverImg)
     }
 
+    const onDownload = () => {
+      const image = document.getElementById('logo') as HTMLImageElement
+      const link = document.createElement('a')
+      link.href = image.src
+      link.download = 'test.png'
+      link.dispatchEvent(new MouseEvent('click'))
+    }
+
     return {
       route,
       template,
-      download
+      download,
+      onDownload
     }
   }
 })

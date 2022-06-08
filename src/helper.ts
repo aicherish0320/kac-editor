@@ -120,6 +120,5 @@ export function timeout(ms: number) {
 }
 export const downloadImage = (url: string) => {
   const fileName = url.substring(url.lastIndexOf('/') + 1)
-  console.log('fileName >>> ', fileName)
   saveAs(url, fileName)
 }

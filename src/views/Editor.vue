@@ -302,7 +302,7 @@ export default defineComponent({
   overflow-y: auto;
   position: fixed;
   margin-top: 50px;
-  max-height: 80vh;
+  max-height: 74vh;
 }
 .page-title .inline-edit span {
   font-weight: 500;
