@@ -4,7 +4,13 @@
       <TemplateList :list="templateLists"></TemplateList>
     </a-row>
     <a-row type="flex" justify="center">
-      <a-button type="primary" size="large">加载更多</a-button>
+      <a-button
+        type="primary"
+        size="large"
+        @click="loadMorePage"
+        :disabled="isLastPage"
+        >加载更多
+      </a-button>
     </a-row>
   </div>
 </template>
@@ -14,23 +20,39 @@ import { computed, defineComponent, onMounted } from 'vue'
 import TemplateList from '@/components/TemplateList.vue'
 import { useStore } from 'vuex'
 import { GlobalDataProps } from '@/store'
+import useLoadMore from '@/hooks/useLoadMore'
 
 export default defineComponent({
   name: 'Home',
   components: { TemplateList },
   setup() {
     const store = useStore<GlobalDataProps>()
+    const total = computed(() => store.state.templates.totalTemplates)
+    const templateLists = computed(() => store.state.templates.data)
+
+    const { loadMorePage, isLastPage } = useLoadMore('fetchTemplates', total, {
+      pageSize: 3,
+      pageIndex: 0
+    })
 
     onMounted(() => {
       store.dispatch('fetchTemplates', {
-        searchParams: { pageSize: 5, pageIndex: 0 }
+        searchParams: { pageSize: 3, pageIndex: 0 }
+      })
+
+      window.addEventListener('scroll', () => {
+        const totalPageHeight = document.body.scrollHeight
+        const scrollPoint = window.scrollY + window.innerHeight
+        if (scrollPoint >= totalPageHeight && !isLastPage.value) {
+          loadMorePage()
+        }
       })
     })
 
-    const templateLists = computed(() => store.state.templates.data)
-
     return {
-      templateLists
+      templateLists,
+      loadMorePage,
+      isLastPage
     }
   }
 })

@@ -13,9 +13,7 @@ const useLoadMore = (
   params: LoadParams = { pageIndex: 0, pageSize: 4 }
 ) => {
   const store = useStore()
-
   const pageIndex = ref(params.pageIndex)
-
   const requestParams = computed(() => {
     return {
       ...params,
