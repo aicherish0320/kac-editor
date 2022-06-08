@@ -22,7 +22,9 @@ export default defineComponent({
     const store = useStore<GlobalDataProps>()
 
     onMounted(() => {
-      store.dispatch('fetchTemplates')
+      store.dispatch('fetchTemplates', {
+        searchParams: { pageSize: 5, pageIndex: 0 }
+      })
     })
 
     const templateLists = computed(() => store.state.templates.data)
