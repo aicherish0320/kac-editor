@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Module } from 'vuex'
 import { actionWrapper, GlobalDataProps } from '.'
 import { RespData, RespListData } from '@/store/respTypes'
@@ -96,7 +95,7 @@ const templates: Module<TemplatesProps, GlobalDataProps> = {
     totalWorks: 0
   },
   getters: {
-    getTemplateById: (state, getters, rootState) => (id: number) => {
+    getTemplateById: (state) => (id: number) => {
       return state.data.find((t) => t.id === id)
     }
   },

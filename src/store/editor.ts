@@ -1,12 +1,7 @@
 // import { AllComponentProps, TextComponentProps } from '@/defaultProps'
 import { insertAt } from '@/helper'
 import { message } from 'ant-design-vue'
-import {
-  AllComponentProps,
-  TextComponentProps,
-  textDefaultProps,
-  imageDefaultProps
-} from 'kac-components'
+import { AllComponentProps, textDefaultProps } from 'kac-components'
 import { cloneDeep } from 'lodash-es'
 import { v4 as uuidv4 } from 'uuid'
 import { Module, Mutation } from 'vuex'

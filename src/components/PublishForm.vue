@@ -134,7 +134,7 @@
 
 <script lang="ts">
 import { GlobalDataProps } from '@/store'
-import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, reactive, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Form, message } from 'ant-design-vue'

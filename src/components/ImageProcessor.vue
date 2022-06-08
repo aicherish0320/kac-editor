@@ -35,9 +35,7 @@ import { message } from 'ant-design-vue'
 import Cropper from 'cropperjs'
 import { DeleteOutlined, ScissorOutlined } from '@ant-design/icons-vue'
 import StyledUploader from './StyledUploader.vue'
-import { UploadResp } from '../extraType'
 import { RespUploadData } from '../store/respTypes'
-import axios from 'axios'
 interface CropDataProps {
   x: number
   y: number

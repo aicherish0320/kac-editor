@@ -34,7 +34,6 @@
 </template>
 
 <script lang="ts">
-import { TextComponentProps } from '@/defaultProps'
 import IconSwitch from '@/components/IconSwitch.vue'
 import ColorPicker from './ColorPicker.vue'
 import BackgroundProcessor from './BackgroundProcessor.vue'
