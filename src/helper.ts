@@ -2,6 +2,7 @@ import { message } from 'ant-design-vue'
 import axios from 'axios'
 import html2canvas from 'html2canvas'
 import QRCode from 'qrcode'
+import { saveAs } from 'file-saver'
 import { RespUploadData } from './store/respTypes'
 
 interface CheckCondition {
@@ -116,4 +117,9 @@ export function generateQRCode(id: string, url: string, width = 100) {
 
 export function timeout(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+export const downloadImage = (url: string) => {
+  const fileName = url.substring(url.lastIndexOf('/') + 1)
+  console.log('fileName >>> ', fileName)
+  saveAs(url, fileName)
 }

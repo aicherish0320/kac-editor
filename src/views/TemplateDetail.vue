@@ -2,9 +2,10 @@
   <div class="work-detail-container">
     <a-row type="flex" justify="center" v-if="template">
       <a-col :span="8" class="cover-img">
-        <a :href="template.coverImg"
-          ><img :src="template.coverImg" alt="" id="cover-img"
-        /></a>
+        <img :src="template.coverImg" alt="img" />
+        <!-- <a :href="template.coverImg"
+          ><img :src="template.coverImg" alt="img"
+        /></a> -->
       </a-col>
       <a-col :span="8">
         <h2>{{ template.title }}</h2>
@@ -21,7 +22,7 @@
           <router-link :to="`/editor/${template.id}`">
             <a-button type="primary" size="large"> 使用模版 </a-button>
           </router-link>
-          <a-button size="large"> 下载图片海报 </a-button>
+          <a-button size="large" @click="download"> 下载图片海报 </a-button>
         </div>
       </a-col>
     </a-row>
@@ -29,26 +30,37 @@
 </template>
 
 <script lang="ts">
-import { GlobalDataProps } from '@/store'
-import { TemplateProps } from '@/store/templates'
-import { computed, defineComponent } from 'vue'
+import { defineComponent, computed, onMounted, nextTick } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-
+import { GlobalDataProps } from '../store/index'
+import { TemplateProps } from '../store/templates'
+import { generateQRCode, downloadImage } from '../helper'
+import { baseH5URL } from '@/services/http'
 export default defineComponent({
-  name: 'TemplateDetail',
   setup() {
-    const store = useStore<GlobalDataProps>()
     const route = useRoute()
-
+    const store = useStore<GlobalDataProps>()
     const currentId = route.params.id as string
-
     const template = computed<TemplateProps>(() =>
       store.getters.getTemplateById(parseInt(currentId))
     )
+    const channelURL = computed(
+      () => `${baseH5URL}/p/${template.value.id}-${template.value.uuid}`
+    )
+    onMounted(async () => {
+      await store.dispatch('fetchTemplate', { urlParams: { id: currentId } })
+      await nextTick()
+      await generateQRCode('barcode-container', channelURL.value, 150)
+    })
+    const download = () => {
+      downloadImage(template.value.coverImg)
+    }
 
     return {
-      template
+      route,
+      template,
+      download
     }
   }
 })
@@ -56,13 +68,13 @@ export default defineComponent({
 
 <style scoped>
 .work-detail-container {
-  margin-top: 50px;
+  padding: 20px 0;
 }
 .cover-img {
   margin-right: 30px;
 }
 .cover-img img {
-  width: 100%;
+  /* width: 100%; */
 }
 .use-button {
   margin: 30px 0;

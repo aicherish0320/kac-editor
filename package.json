@@ -13,6 +13,7 @@
     "axios": "^0.26.1",
     "clipboard": "^2.0.11",
     "cropperjs": "^1.5.12",
+    "file-saver": "^2.0.5",
     "hotkeys-js": "^3.9.3",
     "html2canvas": "^1.4.1",
     "kac-components": "^1.0.3",
@@ -27,6 +28,7 @@
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/jest": "^24.0.19",
     "@types/lodash-es": "^4.17.6",
     "@types/qrcode": "^1.4.2",
