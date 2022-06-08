@@ -1,7 +1,7 @@
 <template>
   <div class="content-container">
     <a-row :gutter="16">
-      <TemplateList :list="testData"></TemplateList>
+      <TemplateList :list="templateLists"></TemplateList>
     </a-row>
     <a-row type="flex" justify="center">
       <a-button type="primary" size="large">加载更多</a-button>
@@ -25,10 +25,10 @@ export default defineComponent({
       store.dispatch('fetchTemplates')
     })
 
-    const testData = computed(() => store.state.templates.data)
+    const templateLists = computed(() => store.state.templates.data)
 
     return {
-      testData
+      templateLists
     }
   }
 })
