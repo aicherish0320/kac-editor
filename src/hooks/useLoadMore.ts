@@ -17,20 +17,30 @@ const useLoadMore = (
   const requestParams = computed(() => {
     return {
       ...params,
-      pageIndex: pageIndex.value + 1
+      pageIndex: pageIndex.value
     }
   })
 
   const loadMorePage = () => {
-    store
-      .dispatch(actionName, { searchParams: requestParams.value })
-      .then(() => pageIndex.value++)
+    pageIndex.value++
+    store.dispatch(actionName, { searchParams: requestParams.value })
   }
+
+  const loadPrevPage = () => {
+    pageIndex.value--
+    store.dispatch(actionName, { searchParams: requestParams.value })
+  }
+
+  const isFirstPage = computed(() => {
+    return pageIndex.value === 0
+  })
+
   const isLastPage = computed(() => {
     // pageIndex 从 0 开始
     return Math.ceil(total.value / params.pageSize) === pageIndex.value + 1
   })
-  return { loadMorePage, isLastPage, pageIndex }
+
+  return { loadMorePage, isLastPage, pageIndex, loadPrevPage, isFirstPage }
 }
 
 export default useLoadMore
