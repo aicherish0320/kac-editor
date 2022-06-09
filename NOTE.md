@@ -439,3 +439,11 @@ noopener 一个重要的属性，对于 web  安全来说非常关键
   - VUE_APP 开头的变量
   - NODE_ENV：当前使用的模式
   - BASE_URL：部署到的基础路径
+
+## Webpack 构建优化
+### Bundler - 打包工具
+将浏览器不支持的模块进行编译，转换，合并最后生成的代码可以在浏览器端良好的运行的工具
+- Loader
+  用于对模块的源代码进行转换，loader 可以使你在 import 或 load 模块时预处理文件
+- Plugin
+  插件是 webpack 的支柱功能。webpack 自身也是构建与你在 webpack 配置中用到的 相同的插件系统之上，插件的目的在于解决 loader 无法实现的其它事。我自己的理解，loader 解决的是各种不通资源的问题，plugins 更多解决的是项目整体的事情
