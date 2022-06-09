@@ -447,3 +447,9 @@ noopener 一个重要的属性，对于 web  安全来说非常关键
   用于对模块的源代码进行转换，loader 可以使你在 import 或 load 模块时预处理文件
 - Plugin
   插件是 webpack 的支柱功能。webpack 自身也是构建与你在 webpack 配置中用到的 相同的插件系统之上，插件的目的在于解决 loader 无法实现的其它事。我自己的理解，loader 解决的是各种不通资源的问题，plugins 更多解决的是项目整体的事情
+
+Loaders 关注代码中的单个资源，plugins 关注整体流程，可以接触到 webpack 构建流程中的各个阶段并劫持做一些代码处理
+插件的格式
+- 一个 Javascript 函数或 Javascript 类
+- 在它原型上定义的 apply 方法，会在安装插件时被调用，并被 webpack compiler 调用一次
+- 指定一个触及到 webpack 本身的事件钩子，即hooks，用于特定时机处理额外的逻辑
