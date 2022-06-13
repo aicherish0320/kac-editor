@@ -453,3 +453,10 @@ Loaders 关注代码中的单个资源，plugins 关注整体流程，可以接�
 - 一个 Javascript 函数或 Javascript 类
 - 在它原型上定义的 apply 方法，会在安装插件时被调用，并被 webpack compiler 调用一次
 - 指定一个触及到 webpack 本身的事件钩子，即hooks，用于特定时机处理额外的逻辑
+
+## vue.config.js 个性化构建结果
+- publicPath: 部署应用包时的基本URL
+  - 默认值 '/'，vue-cli 会假设你的应用被部署在一个域名的根路径上
+  - 可以设置为子路径，'/abc'
+  - 可以设置为 CDN 路径
+  - 还可以设置为绝对路径('' './')，这样所有的资源都会被链接为相对路径
