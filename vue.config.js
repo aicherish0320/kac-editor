@@ -1,3 +1,7 @@
+const BundleAnalyzerPlugin =
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+
 module.exports = {
   publicPath: './',
   css: {
@@ -20,6 +24,16 @@ module.exports = {
         })
         return args
       })
+    }
+  },
+  configureWebpack: (config) => {
+    if (process.env.NODE_ENV === 'development') {
+      config.plugins.push(
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: true
+        })
+      )
     }
   }
 }
