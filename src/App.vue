@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <a-progress :percent="30" />
     <a-spin v-if="showLoading" tip="读取中" class="global-spinner" />
     <router-view />
   </div>

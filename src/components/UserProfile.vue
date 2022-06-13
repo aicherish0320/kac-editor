@@ -6,7 +6,7 @@
   </router-link>
   <div v-else>
     <a-dropdown-button class="user-profile-component">
-      <router-link to="/setting">{{ user.data.nickName }}</router-link>
+      <router-link to="/">{{ user.data.nickName }}</router-link>
       <template v-slot:overlay>
         <a-menu class="user-profile-dropdown">
           <a-menu-item key="0" @click="createDesign">创建作品</a-menu-item>

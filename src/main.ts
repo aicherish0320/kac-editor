@@ -6,7 +6,7 @@ import store from './store'
 import KacComponents from 'kac-components'
 import 'kac-components/dist/bundle.css'
 
-import Antd from 'ant-design-vue'
+import Antd from './configAntd'
 // import 'ant-design-vue/dist/antd.css'
 import 'ant-design-vue/dist/antd.less'
 

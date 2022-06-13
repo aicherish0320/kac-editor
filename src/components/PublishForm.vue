@@ -140,7 +140,7 @@ import { useStore } from 'vuex'
 import { Form, message } from 'ant-design-vue'
 import { baseH5URL } from '@/services/http'
 import { generateQRCode } from '@/helper'
-import { last } from 'lodash'
+import { last } from 'lodash-es'
 import Clipboard from 'clipboard'
 import axios from 'axios'
 

@@ -1,9 +1,10 @@
 const BundleAnalyzerPlugin =
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
   require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const webpack = require('webpack')
 
 module.exports = {
   publicPath: './',
+  productionSourceMap: false,
   css: {
     loaderOptions: {
       less: {
@@ -27,6 +28,13 @@ module.exports = {
     }
   },
   configureWebpack: (config) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^\.\/locale$/,
+        contextRegExp: /moment$/
+      })
+    )
+
     if (process.env.NODE_ENV === 'development') {
       config.plugins.push(
         new BundleAnalyzerPlugin({
