@@ -531,7 +531,6 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       }
     */
     fetchWork(state, { data }: RespWorkData) {
-      console.log('data >>> ', data)
       const { content, ...rest } = data
       state.page = { ...state.page, ...rest }
       if (content.props) {

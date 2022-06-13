@@ -37,7 +37,6 @@ export function actionWrapper(
     if (urlParams) {
       const toPath = compile(url, { encode: encodeURIComponent })
       newURL = toPath(urlParams)
-      console.log(newURL)
     }
     if (searchParams) {
       const search = new URLSearchParams()

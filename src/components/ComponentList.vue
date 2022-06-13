@@ -47,7 +47,6 @@ export default defineComponent({
     }
     const onImageUploaded = (data: { resp: RespUploadData; file: File }) => {
       const { resp, file } = data
-      console.log('file >>> ', file)
 
       const componentData: ComponentData = {
         name: 'ka-image',

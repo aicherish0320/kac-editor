@@ -1,7 +1,6 @@
 import { TextComponentProps } from '@/defaultProps'
 import store from '@/store'
-import { ComponentData, testComponents } from '@/store/editor'
-import { testData } from '@/store/templates'
+import { testComponents } from '@/store/editor'
 import { clone, last } from 'lodash-es'
 
 const cloneComponents = clone(testComponents)

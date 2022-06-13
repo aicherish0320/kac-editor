@@ -79,7 +79,6 @@ export default defineComponent({
           cropper = new Cropper(cropperImg.value, {
             crop(event) {
               const { x, y, width, height } = event.detail
-              console.log(event)
 
               cropData = {
                 x: Math.floor(x),

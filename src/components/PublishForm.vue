@@ -221,8 +221,7 @@ export default defineComponent({
 
     const publishTemplate = async () => {
       // api/works/publish-template/2618
-      const res = axios.post('/works/publish-template/' + currentWorkId)
-      console.log('res >>> ', res)
+      axios.post('/works/publish-template/' + currentWorkId)
     }
 
     return {
