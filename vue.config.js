@@ -45,21 +45,30 @@ module.exports = {
 
     config.optimization.splitChunks = {
       maxInitialRequests: Infinity,
-      minSize: 0,
+      minSize: 300 * 1024,
       chunks: 'all',
       cacheGroups: {
         antdVendor: {
-          name: 'antd-design-vue',
-          test: /[\\/]node_modules[\\/](ant-design-vue)[\\/]/
-        },
-        canvasVendor: {
-          name: 'html2canvas',
-          test: /[\\/]node_modules[\\/](html2canvas)[\\/]/
-        },
-        vendor: {
-          name: 'vendor',
-          test: /[\\/]node_modules[\\/](!html2canvas)(!ant-design-vue)[\\/]/
+          name: (module) => {
+            const packageName = module.context.match(
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+            )[1]
+            return `npm.${packageName.replace('@', '')}`
+          },
+          test: /[\\/]node_modules[\\/]/
         }
+        // antdVendor: {
+        //   name: 'antd-design-vue',
+        //   test: /[\\/]node_modules[\\/](ant-design-vue)[\\/]/
+        // },
+        // canvasVendor: {
+        //   name: 'html2canvas',
+        //   test: /[\\/]node_modules[\\/](html2canvas)[\\/]/
+        // },
+        // vendor: {
+        //   name: 'vendor',
+        //   test: /[\\/]node_modules[\\/](!html2canvas)(!ant-design-vue)[\\/]/
+        // }
       }
     }
   }
