@@ -5,18 +5,18 @@ const webpack = require('webpack')
 module.exports = {
   publicPath: './',
   productionSourceMap: false,
-  css: {
-    loaderOptions: {
-      less: {
-        lessOptions: {
-          modifyVars: {
-            'primary-color': '#1DA57A'
-          },
-          javascriptEnabled: true
-        }
-      }
-    }
-  },
+  // css: {
+  //   loaderOptions: {
+  //     less: {
+  //       lessOptions: {
+  //         modifyVars: {
+  //           'primary-color': '#1DA57A'
+  //         },
+  //         javascriptEnabled: true
+  //       }
+  //     }
+  //   }
+  // },
   chainWebpack: (config) => {
     if (process.env.NODE_ENV === 'production') {
       config.optimization.minimizer('terser').tap((args) => {
@@ -34,7 +34,6 @@ module.exports = {
         contextRegExp: /moment$/
       })
     )
-
     if (process.env.NODE_ENV === 'development') {
       config.plugins.push(
         new BundleAnalyzerPlugin({
@@ -42,6 +41,26 @@ module.exports = {
           openAnalyzer: true
         })
       )
+    }
+
+    config.optimization.splitChunks = {
+      maxInitialRequests: Infinity,
+      minSize: 0,
+      chunks: 'all',
+      cacheGroups: {
+        antdVendor: {
+          name: 'antd-design-vue',
+          test: /[\\/]node_modules[\\/](ant-design-vue)[\\/]/
+        },
+        canvasVendor: {
+          name: 'html2canvas',
+          test: /[\\/]node_modules[\\/](html2canvas)[\\/]/
+        },
+        vendor: {
+          name: 'vendor',
+          test: /[\\/]node_modules[\\/](!html2canvas)(!ant-design-vue)[\\/]/
+        }
+      }
     }
   }
 }

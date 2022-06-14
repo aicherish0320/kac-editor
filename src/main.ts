@@ -8,7 +8,7 @@ import 'kac-components/dist/bundle.css'
 
 import Antd from './configAntd'
 // import 'ant-design-vue/dist/antd.css'
-import 'ant-design-vue/dist/antd.less'
+// import 'ant-design-vue/dist/antd.less'
 
 import 'cropperjs/dist/cropper.css'
 import './services/http.ts'
